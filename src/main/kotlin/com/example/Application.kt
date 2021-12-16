@@ -15,10 +15,10 @@ fun Application.module() {
             mainModule
         )
     }
-    configureSecurity()
-    configureSockets()
-    configureRouting()
+//    configureSecurity()
+//    configureSockets()
     configureHTTP()
+    configureRouting()
     configureMonitoring()
     configureSerialization()
 }

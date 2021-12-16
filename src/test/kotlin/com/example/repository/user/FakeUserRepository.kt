@@ -3,16 +3,10 @@ package com.example.repository.user
 import com.example.domain.model.User
 import com.example.domain.util.AppException
 import com.example.domain.util.Constants
-import org.litote.kmongo.and
-import org.litote.kmongo.coroutine.CoroutineDatabase
-import org.litote.kmongo.eq
-import org.litote.kmongo.or
 
-class UserRepositoryImpl(
-    database: CoroutineDatabase
-) : UserRepository {
+internal class FakeUserRepository : UserRepository {
 
-    private val users = database.getCollection<User>()
+    private val users = mutableListOf<User>()
 
     override suspend fun add(user: User) {
         if (findByEmail(user.email) != null) {
@@ -21,26 +15,21 @@ class UserRepositoryImpl(
         if (findByUsername(user.username) != null) {
             throw AppException.RepositoryException(Constants.Error.Repository.USERNAME_TAKEN)
         }
-        users.insertOne(user)
+        users.add(user)
     }
 
     override suspend fun findById(id: String) =
-        users.findOneById(id)
+        users.find { it.id == id }
 
     override suspend fun findByEmail(email: String) =
-        users.findOne(User::email eq email)
+        users.find { it.email == email }
 
     override suspend fun findByUsername(username: String) =
-        users.findOne(User::username eq username)
+        users.find { it.username == username }
 
     override suspend fun findByCredentials(emailOrUsername: String, password: String) =
-        users.findOne(
-            and(
-                User::password eq password,
-                or(
-                    User::email eq emailOrUsername,
-                    User::username eq emailOrUsername
-                )
-            )
-        )
+        users.find {
+            it.password == password &&
+                    (it.email == emailOrUsername || it.username == emailOrUsername)
+        }
 }

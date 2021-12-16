@@ -1,34 +1,52 @@
 package com.example.routes
 
-import com.example.controller.UserController
-import com.example.domain.model.request.CreateAccountRequest
+import com.example.service.user.UserService
+import com.example.domain.model.request.SignUpRequest
+import com.example.domain.model.response.Response
+import com.example.domain.util.AppException
+import com.example.domain.util.Constants
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.koin.ktor.ext.inject
 
-fun Route.userRoutes() {
-    val userController: UserController by inject()
-    route("/api/user/add") {
+fun Route.signUp(userService: UserService) {
+    route(Constants.Routes.User.SIGN_UP) {
         post {
-            val request = call.receiveOrNull<CreateAccountRequest>()
-                ?: kotlin.run {
-                    call.respond(HttpStatusCode.BadRequest)
-                    return@post
-                }
-
+            val request =
+                call.receiveOrNull<SignUpRequest>()
+                    ?: kotlin.run {
+                        call.respond(HttpStatusCode.BadRequest)
+                        return@post
+                    }
             try {
-                userController.add(
+                userService.add(
                     email = request.email,
                     username = request.username,
                     password = request.password
                 )
-                println("successfully added a user")
+                call.respond(
+                    Response(
+                        isSuccessful = true
+                    )
+                )
+            } catch (e: AppException) {
+                call.respond(
+                    Response(
+                        isSuccessful = false,
+                        message = e.message
+                    )
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+    }
+}
+
+fun Route.signIn() {
+    route(Constants.Routes.User.SIGN_IN) {
+
     }
 }

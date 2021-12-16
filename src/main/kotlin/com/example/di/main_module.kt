@@ -1,5 +1,7 @@
 package com.example.di
 
+import com.example.service.user.UserService
+import com.example.service.user.UserServiceImpl
 import com.example.domain.util.Constants
 import com.example.repository.user.UserRepository
 import com.example.repository.user.UserRepositoryImpl
@@ -15,5 +17,9 @@ val mainModule = module {
 
     single<UserRepository> {
         UserRepositoryImpl(get())
+    }
+
+    single<UserService> {
+        UserServiceImpl(get())
     }
 }

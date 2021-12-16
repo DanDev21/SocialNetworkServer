@@ -1,20 +1,16 @@
 package com.example.domain.plugins
 
+import com.example.service.user.UserService
+import com.example.routes.signUp
 import io.ktor.routing.*
-import io.ktor.http.content.*
 import io.ktor.application.*
-import io.ktor.response.*
+import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
 
+    val userService: UserService by inject()
 
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
-        // Static plugin. Try to access `/static/index.html`
-        static("/static") {
-            resources("static")
-        }
+        signUp(userService)
     }
 }

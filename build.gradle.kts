@@ -15,6 +15,12 @@ application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -50,6 +56,10 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+
+
+    // junit
+    implementation("org.junit.jupiter:junit-jupiter:5.8.2")
 
 
 //    ----------------------   testing   ----------------------

@@ -1,6 +1,7 @@
 package com.example.domain.validation
 
 import com.example.domain.model.User
+import com.example.domain.util.AppException
 import com.example.domain.util.Constants
 
 class UserValidator : Validator<User> {
@@ -21,7 +22,7 @@ class UserValidator : Validator<User> {
         }
 
         if (message.isNotEmpty()) {
-            throw Exception(message)
+            throw AppException.InvalidException(message)
         }
     }
 }
