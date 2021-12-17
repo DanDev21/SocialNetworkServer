@@ -1,5 +1,6 @@
 package com.example.routes
 
+import com.example.domain.model.Credential
 import com.example.domain.model.request.SignInRequest
 import com.example.service.user.UserService
 import com.example.domain.model.request.SignUpRequest
@@ -20,6 +21,7 @@ fun Route.signUp(userService: UserService) {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
+
         try {
             userService.add(
                 email = request.email,
@@ -55,10 +57,11 @@ fun Route.signIn(userService: UserService) {
                     return@post
                 }
         try {
-            userService.findByCredentials(
-                request.emailOrUsername,
-                request.password
+            val credential = Credential(
+                emailOrUsername = request.emailOrUsername,
+                password = request.password
             )
+            userService.findByCredentials(credential)
             call.respond(
                 HttpStatusCode.OK,
                 Response(isSuccessful = true)

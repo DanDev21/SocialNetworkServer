@@ -5,5 +5,5 @@ import com.example.domain.util.AppException
 interface Validator<T> {
 
     @Throws(AppException.InvalidException::class)
-    fun validate(entity: T)
+    suspend fun validate(entity: T)
 }

@@ -27,6 +27,10 @@ repositories {
 
 dependencies {
 
+    // kotlin - reflect
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
+
+
     // ktor - core
     implementation("io.ktor:ktor-server-core:$ktor_version")
 

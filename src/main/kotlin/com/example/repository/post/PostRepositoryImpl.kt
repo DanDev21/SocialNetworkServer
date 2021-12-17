@@ -15,8 +15,7 @@ class PostRepositoryImpl(
         posts.insertOne(post).wasAcknowledged()
 
     override suspend fun delete(id: String) =
-        posts.deleteOne(Post::id eq id)
-            .deletedCount > 0
+        posts.deleteOne(Post::id eq id).deletedCount > 0
 
     override suspend fun getAll(
         userId: String,

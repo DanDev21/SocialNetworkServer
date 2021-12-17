@@ -1,10 +1,11 @@
 package com.example.routes
 
 import com.example.di.testModule
+import com.example.domain.model.Credential
 import com.example.domain.model.request.SignInRequest
 import com.example.domain.model.request.SignUpRequest
 import com.example.domain.model.response.Response
-import com.example.domain.plugins.configureSerialization
+import com.example.plugins.configureSerialization
 import com.example.domain.util.Constants
 import com.example.service.user.UserServiceImpl
 import com.google.common.truth.Truth.assertThat
@@ -88,17 +89,18 @@ class UserRoutesTest : KoinTest {
                 .isTrue()
 
             runBlocking {
-                val user = userService.findByCredentials(
+                val credential = Credential(
                     emailOrUsername = "test@test.com",
                     password = "test_pass123"
                 )
+                val user = userService.findByCredentials(credential)
                 assertThat(user)
                     .isNotNull()
 
-                assertThat(user?.email)
+                assertThat(user.email)
                     .isEqualTo("test@test.com")
 
-                assertThat(user?.password)
+                assertThat(user.password)
                     .isEqualTo("test_pass123")
             }
         }
@@ -205,44 +207,10 @@ class UserRoutesTest : KoinTest {
 
             assertThat(response.message)
                 .contains(
-                    Constants.Error.Validation.EMAIL +
-                    Constants.Error.Validation.USERNAME +
-                    Constants.Error.Validation.PASSWORD
+                    Constants.Error.Invalid.EMAIL +
+                    Constants.Error.Invalid.USERNAME +
+                    Constants.Error.Invalid.PASSWORD
                 )
-        }
-    }
-
-    @Test
-    fun `Sign in, invalid credentials, unsuccessful response`() {
-        addDefaultUser()
-        withTestApplication(
-            moduleFunction = {
-                configureSerialization()
-                install(Routing) {
-                    signIn(userService)
-                }
-            }
-        ) {
-            val request = handleRequest(
-                method = HttpMethod.Post,
-                uri = Constants.Routes.User.SIGN_IN
-            ) {
-                addHeader("Content-Type", "application/json")
-                val signInRequest = SignInRequest(
-                    emailOrUsername = "   ",
-                    password = "  a1     "
-                )
-                setBody(gson.toJson(signInRequest))
-            }
-
-            val response = gson
-                .fromJson(request.response.content, Response::class.java)
-
-            assertThat(response.isSuccessful)
-                .isFalse()
-
-            assertThat(response.message)
-                .isEqualTo(Constants.Error.Validation.INVALID_FIELD)
         }
     }
 
@@ -278,7 +246,7 @@ class UserRoutesTest : KoinTest {
     }
 
     @Test
-    fun `Sign in, incorrect credentials, successful response`() {
+    fun `Sign in, incorrect credentials, unsuccessful response`() {
         addDefaultUser()
         withTestApplication(
             moduleFunction = {

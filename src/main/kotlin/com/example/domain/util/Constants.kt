@@ -26,9 +26,9 @@ object Constants {
             const val ALREADY_FOLLOW = "You already follow this person."
         }
 
-        object Validation {
-            const val INVALID_ID = "Invalid id."
-            const val INVALID_FIELD = "Invalid field."
+        object Invalid {
+            const val ID = "Invalid id."
+            const val FIELD = "Invalid field."
             const val EMAIL = "The provided email address is invalid."
             const val USERNAME = "The username's length has to be longer than ${Length.Min.USERNAME} characters."
             const val PASSWORD = "The password's length has to be longer than ${Length.Min.PASSWORD} characters."
@@ -51,6 +51,12 @@ object Constants {
 
             const val NEW = "$FOLLOW/follow_user"
             const val UNFOLLOW = "$FOLLOW/unfollow_user"
+        }
+
+        object Post {
+            private const val POST = "$DEFAULT/post"
+
+            const val NEW = "$POST/create_post"
         }
     }
 }

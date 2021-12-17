@@ -1,4 +1,4 @@
-package com.example.domain.plugins
+package com.example.plugins
 
 import io.ktor.http.*
 import io.ktor.features.*

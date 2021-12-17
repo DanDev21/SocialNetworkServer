@@ -1,8 +1,8 @@
 package com.example.repository.user
 
+import com.example.domain.model.Credential
 import com.example.domain.model.User
 import com.example.domain.util.AppException
-import com.example.domain.util.Constants
 
 internal class FakeUserRepository : UserRepository {
 
@@ -10,10 +10,10 @@ internal class FakeUserRepository : UserRepository {
 
     override suspend fun add(user: User) {
         if (findByEmail(user.email) != null) {
-            throw AppException.RepositoryException(Constants.Error.Repository.EMAIL_TAKEN)
+            throw AppException.Repo.EmailTaken
         }
         if (findByUsername(user.username) != null) {
-            throw AppException.RepositoryException(Constants.Error.Repository.USERNAME_TAKEN)
+            throw AppException.Repo.UsernameTaken
         }
         users.add(user)
     }
@@ -27,19 +27,13 @@ internal class FakeUserRepository : UserRepository {
     override suspend fun findByUsername(username: String) =
         users.find { it.username == username }
 
-    override suspend fun findByCredentials(
-        emailOrUsername: String,
-        password: String
-    ): User {
-        val user = users.find { it.password == password }
-        return if (user != null) {
-            if (user.email == emailOrUsername || user.username == emailOrUsername) {
-                user
-            } else throw AppException.RepositoryException(
-                Constants.Error.Repository.CREDENTIALS_DO_NOT_MATCH
-            )
-        } else throw AppException.RepositoryException(
-            Constants.Error.Repository.CREDENTIALS_DO_NOT_MATCH
-        )
+    override suspend fun findByCredentials(credential: Credential): User {
+        val user = users.find { it.password == credential.password }
+        if (user != null) {
+            if (user.email == credential.emailOrUsername ||
+                user.username == credential.emailOrUsername) {
+                return user
+            } else throw AppException.Repo.CredentialsDoNotMatch
+        } else throw AppException.Repo.CredentialsDoNotMatch
     }
 }

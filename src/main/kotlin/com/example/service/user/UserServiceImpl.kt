@@ -1,7 +1,7 @@
 package com.example.service.user
 
+import com.example.domain.model.Credential
 import com.example.domain.model.User
-import com.example.domain.validation.CredentialValidator
 import com.example.domain.validation.UserValidator
 import com.example.repository.user.UserRepository
 
@@ -10,7 +10,6 @@ class UserServiceImpl(
 ) : UserService {
 
     override val userValidator = UserValidator()
-    override val credentialValidator = CredentialValidator()
 
     override suspend fun add(
         email: String,
@@ -32,13 +31,6 @@ class UserServiceImpl(
     override suspend fun findByEmail(email: String) =
         userRepository.findByEmail(email)
 
-    override suspend fun findByCredentials(
-        emailOrUsername: String,
-        password: String
-    ): User? {
-        val trimmedEmailOrUsername = emailOrUsername.trim()
-        credentialValidator.validatePassword(password.trim())
-        credentialValidator.validateEmailOrUsername(trimmedEmailOrUsername)
-        return userRepository.findByCredentials(trimmedEmailOrUsername, password)
-    }
+    override suspend fun findByCredentials(credential: Credential) =
+        userRepository.findByCredentials(credential)
 }

@@ -5,7 +5,7 @@ import com.example.domain.util.AppException
 
 interface FollowRepository {
 
-    @Throws(AppException.RepositoryException::class)
+    @Throws(AppException.Repo::class)
     suspend fun add(follow: Follow)
 
     suspend fun findByIds(byWhoId: String, otherId: String): Follow?

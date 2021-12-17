@@ -6,19 +6,19 @@ import com.example.domain.util.Constants
 
 class UserValidator : Validator<User> {
 
-    override fun validate(entity: User) {
+    override suspend fun validate(entity: User) {
         var message = ""
 
         if (entity.email.isBlank()) {
-            message += Constants.Error.Validation.EMAIL
+            message += Constants.Error.Invalid.EMAIL
         }
 
         if (Constants.Length.Min.USERNAME > entity.username.length) {
-            message += Constants.Error.Validation.USERNAME
+            message += Constants.Error.Invalid.USERNAME
         }
 
         if (Constants.Length.Min.PASSWORD > entity.password.length) {
-            message += Constants.Error.Validation.PASSWORD
+            message += Constants.Error.Invalid.PASSWORD
         }
 
         if (message.isNotEmpty()) {

@@ -15,7 +15,7 @@ class FollowRepositoryImpl(
 
     override suspend fun add(follow: Follow) {
         if (findByIds(follow.byWhoId, follow.otherId) != null) {
-            throw AppException.RepositoryException(Constants.Error.Repository.ALREADY_FOLLOW)
+            throw AppException.Repo.AlreadyFollow
         }
         follows.insertOne(follow)
     }

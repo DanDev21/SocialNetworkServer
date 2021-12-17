@@ -5,10 +5,14 @@ import com.example.service.user.UserServiceImpl
 import com.example.domain.util.Constants
 import com.example.repository.follow.FollowRepository
 import com.example.repository.follow.FollowRepositoryImpl
+import com.example.repository.post.PostRepository
+import com.example.repository.post.PostRepositoryImpl
 import com.example.repository.user.UserRepository
 import com.example.repository.user.UserRepositoryImpl
 import com.example.service.follow.FollowService
 import com.example.service.follow.FollowServiceImpl
+import com.example.service.post.PostService
+import com.example.service.post.PostServiceImpl
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
@@ -29,6 +33,10 @@ val mainModule = module {
         FollowRepositoryImpl(get())
     }
 
+    single<PostRepository> {
+        PostRepositoryImpl(get())
+    }
+
     // services
 
     single<UserService> {
@@ -37,5 +45,9 @@ val mainModule = module {
 
     single<FollowService> {
         FollowServiceImpl(get(), get())
+    }
+
+    single<PostService> {
+        PostServiceImpl(get(), get(), get())
     }
 }
