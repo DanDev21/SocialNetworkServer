@@ -1,5 +1,6 @@
 package com.example.domain.plugins
 
+import com.example.routes.signIn
 import com.example.service.user.UserService
 import com.example.routes.signUp
 import io.ktor.routing.*
@@ -12,5 +13,6 @@ fun Application.configureRouting() {
 
     routing {
         signUp(userService)
+        signIn(userService)
     }
 }

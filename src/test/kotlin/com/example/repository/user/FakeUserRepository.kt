@@ -27,9 +27,19 @@ internal class FakeUserRepository : UserRepository {
     override suspend fun findByUsername(username: String) =
         users.find { it.username == username }
 
-    override suspend fun findByCredentials(emailOrUsername: String, password: String) =
-        users.find {
-            it.password == password &&
-                    (it.email == emailOrUsername || it.username == emailOrUsername)
-        }
+    override suspend fun findByCredentials(
+        emailOrUsername: String,
+        password: String
+    ): User {
+        val user = users.find { it.password == password }
+        return if (user != null) {
+            if (user.email == emailOrUsername || user.username == emailOrUsername) {
+                user
+            } else throw AppException.RepositoryException(
+                Constants.Error.Repository.CREDENTIALS_DO_NOT_MATCH
+            )
+        } else throw AppException.RepositoryException(
+            Constants.Error.Repository.CREDENTIALS_DO_NOT_MATCH
+        )
+    }
 }

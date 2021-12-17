@@ -19,9 +19,11 @@ object Constants {
         object Repository {
             const val EMAIL_TAKEN = "This email is already used."
             const val USERNAME_TAKEN = "This username is already used."
+            const val CREDENTIALS_DO_NOT_MATCH = "The username and the password don't match."
         }
 
         object Validation {
+            const val INVALID_FIELD = "Invalid field."
             const val EMAIL = "The provided email address is invalid."
             const val USERNAME = "The username's length has to be longer than ${Length.Min.USERNAME} characters."
             const val PASSWORD = "The password's length has to be longer than ${Length.Min.PASSWORD} characters."

@@ -10,7 +10,7 @@ data class User(
 
     val bio: Bio = Bio(),
     val contact: Contact = Contact(),
-    val skills: List<Skill> = listOf(),
+    val skills: List<String> = listOf(),
 
     @BsonId
     val id: String = ObjectId().toString(),
@@ -18,10 +18,6 @@ data class User(
     data class Bio(
         val text: String? = null,
         val profileImageUrl: String? = null
-    )
-
-    data class Skill(
-        val name: String
     )
 
     data class Contact(

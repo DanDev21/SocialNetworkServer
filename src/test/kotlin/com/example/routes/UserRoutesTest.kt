@@ -1,6 +1,7 @@
 package com.example.routes
 
 import com.example.di.testModule
+import com.example.domain.model.request.SignInRequest
 import com.example.domain.model.request.SignUpRequest
 import com.example.domain.model.response.Response
 import com.example.domain.plugins.configureSerialization
@@ -71,12 +72,12 @@ class UserRoutesTest : KoinTest {
                 method = HttpMethod.Post,
                 uri = Constants.Routes.User.SIGN_UP
             ) {
-                addHeader("Content-Type", "application/json")
                 val signUpRequest = SignUpRequest(
                     email = "test@test.com",
                     username = "test_user",
                     password = "test_pass123"
                 )
+                addHeader("Content-Type", "application/json")
                 setBody(gson.toJson(signUpRequest))
             }
 
@@ -105,13 +106,7 @@ class UserRoutesTest : KoinTest {
 
     @Test
     fun `Sign up - email is already used - unsuccessful response`() {
-        runBlocking {
-            userService.add(
-                email = "test@test.com",
-                username = "test_user",
-                password = "test_pass123"
-            )
-        }
+        addDefaultUser()
         withTestApplication(
             moduleFunction = {
                 configureSerialization()
@@ -124,12 +119,12 @@ class UserRoutesTest : KoinTest {
                 method = HttpMethod.Post,
                 uri = Constants.Routes.User.SIGN_UP
             ) {
-                addHeader("Content-Type", "application/json")
                 val signUpRequest = SignUpRequest(
                     email = "test@test.com",
-                    username = "test_user2",
-                    password = "test_pass99"
+                    username = "test_user",
+                    password = "test_pass123"
                 )
+                addHeader("Content-Type", "application/json")
                 setBody(gson.toJson(signUpRequest))
             }
 
@@ -146,13 +141,7 @@ class UserRoutesTest : KoinTest {
 
     @Test
     fun `Sign up - username is already used - unsuccessful response`() {
-        runBlocking {
-            userService.add(
-                email = "test@test.com",
-                username = "test_user",
-                password = "test_pass123"
-            )
-        }
+        addDefaultUser()
         withTestApplication(
             moduleFunction = {
                 configureSerialization()
@@ -165,12 +154,12 @@ class UserRoutesTest : KoinTest {
                 method = HttpMethod.Post,
                 uri = Constants.Routes.User.SIGN_UP
             ) {
-                addHeader("Content-Type", "application/json")
                 val signUpRequest = SignUpRequest(
-                    email = "test1@test.com",
+                    email = "other@test.com",
                     username = "test_user",
                     password = "test_pass99"
                 )
+                addHeader("Content-Type", "application/json")
                 setBody(gson.toJson(signUpRequest))
             }
 
@@ -221,5 +210,112 @@ class UserRoutesTest : KoinTest {
                     Constants.Error.Validation.PASSWORD
                 )
         }
+    }
+
+    @Test
+    fun `Sign in, invalid credentials, unsuccessful response`() {
+        addDefaultUser()
+        withTestApplication(
+            moduleFunction = {
+                configureSerialization()
+                install(Routing) {
+                    signIn(userService)
+                }
+            }
+        ) {
+            val request = handleRequest(
+                method = HttpMethod.Post,
+                uri = Constants.Routes.User.SIGN_IN
+            ) {
+                addHeader("Content-Type", "application/json")
+                val signInRequest = SignInRequest(
+                    emailOrUsername = "   ",
+                    password = "  a1     "
+                )
+                setBody(gson.toJson(signInRequest))
+            }
+
+            val response = gson
+                .fromJson(request.response.content, Response::class.java)
+
+            assertThat(response.isSuccessful)
+                .isFalse()
+
+            assertThat(response.message)
+                .isEqualTo(Constants.Error.Validation.INVALID_FIELD)
+        }
+    }
+
+    @Test
+    fun `Sign in, correct credentials, successful response`() {
+        addDefaultUser()
+        withTestApplication(
+            moduleFunction = {
+                configureSerialization()
+                install(Routing) {
+                    signIn(userService)
+                }
+            }
+        ) {
+            val request = handleRequest(
+                method = HttpMethod.Post,
+                uri = Constants.Routes.User.SIGN_IN
+            ) {
+                addHeader("Content-Type", "application/json")
+                val signInRequest = SignInRequest(
+                    emailOrUsername = "test_user",
+                    password = "test_pass123"
+                )
+                setBody(gson.toJson(signInRequest))
+            }
+
+            val response = gson
+                .fromJson(request.response.content, Response::class.java)
+
+            assertThat(response.isSuccessful)
+                .isTrue()
+        }
+    }
+
+    @Test
+    fun `Sign in, incorrect credentials, successful response`() {
+        addDefaultUser()
+        withTestApplication(
+            moduleFunction = {
+                configureSerialization()
+                install(Routing) {
+                    signIn(userService)
+                }
+            }
+        ) {
+            val request = handleRequest(
+                method = HttpMethod.Post,
+                uri = Constants.Routes.User.SIGN_IN
+            ) {
+                addHeader("Content-Type", "application/json")
+                val signInRequest = SignInRequest(
+                    emailOrUsername = "test_user",
+                    password = "incorrect_pass"
+                )
+                setBody(gson.toJson(signInRequest))
+            }
+
+            val response = gson
+                .fromJson(request.response.content, Response::class.java)
+
+            assertThat(response.isSuccessful)
+                .isFalse()
+
+            assertThat(response.message)
+                .isEqualTo(Constants.Error.Repository.CREDENTIALS_DO_NOT_MATCH)
+        }
+    }
+
+    private fun addDefaultUser() = runBlocking {
+        userService.add(
+            email = "test@test.com",
+            username = "test_user",
+            password = "test_pass123"
+        )
     }
 }

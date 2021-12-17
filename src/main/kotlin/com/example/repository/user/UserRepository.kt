@@ -14,5 +14,6 @@ interface UserRepository {
 
     suspend fun findByUsername(username: String): User?
 
+    @Throws(AppException.RepositoryException::class)
     suspend fun findByCredentials(emailOrUsername: String, password: String): User?
 }
