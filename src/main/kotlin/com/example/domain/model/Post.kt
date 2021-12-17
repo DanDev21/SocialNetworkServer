@@ -6,9 +6,9 @@ import org.bson.types.ObjectId
 data class Post(
     val authorId: String,
 
-    val timestamp: Long,
     val description: String?,
     val imageUrl: String,
+    val timestamp: Long,
 
     @BsonId
     val id: String = ObjectId().toString(),

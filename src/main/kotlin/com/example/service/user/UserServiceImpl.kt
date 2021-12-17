@@ -29,6 +29,9 @@ class UserServiceImpl(
     override suspend fun findById(id: String) =
         userRepository.findById(id)
 
+    override suspend fun findByEmail(email: String) =
+        userRepository.findByEmail(email)
+
     override suspend fun findByCredentials(
         emailOrUsername: String,
         password: String

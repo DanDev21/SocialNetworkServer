@@ -19,5 +19,7 @@ interface UserService {
 
     suspend fun findById(id: String): User?
 
+    suspend fun findByEmail(email: String): User?
+
     suspend fun findByCredentials(emailOrUsername: String, password: String): User?
 }

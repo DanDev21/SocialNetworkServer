@@ -4,6 +4,8 @@ object Constants {
 
     object Length {
 
+        const val POST_PAGE = 20
+
         object Min {
             const val USERNAME = 3
             const val PASSWORD = 6
@@ -20,9 +22,12 @@ object Constants {
             const val EMAIL_TAKEN = "This email is already used."
             const val USERNAME_TAKEN = "This username is already used."
             const val CREDENTIALS_DO_NOT_MATCH = "The username and the password don't match."
+
+            const val ALREADY_FOLLOW = "You already follow this person."
         }
 
         object Validation {
+            const val INVALID_ID = "Invalid id."
             const val INVALID_FIELD = "Invalid field."
             const val EMAIL = "The provided email address is invalid."
             const val USERNAME = "The username's length has to be longer than ${Length.Min.USERNAME} characters."
@@ -39,6 +44,13 @@ object Constants {
 
             const val SIGN_UP = "$USER/sign_up"
             const val SIGN_IN = "$USER/sign_in"
+        }
+
+        object Follow {
+            private const val FOLLOW = "$DEFAULT/follow"
+
+            const val NEW = "$FOLLOW/follow_user"
+            const val UNFOLLOW = "$FOLLOW/unfollow_user"
         }
     }
 }
