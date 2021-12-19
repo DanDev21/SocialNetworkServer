@@ -1,11 +1,11 @@
 package com.example.routes
 
-import com.example.domain.model.request.FollowRequest
-import com.example.domain.model.request.UnfollowRequest
-import com.example.domain.model.response.Response
+import com.example.domain.data.dto.request.FollowRequest
+import com.example.domain.data.dto.request.UnfollowRequest
+import com.example.domain.data.dto.response.Response
 import com.example.domain.util.AppException
 import com.example.domain.util.Constants
-import com.example.service.follow.FollowService
+import com.example.service.FollowService
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -37,6 +37,10 @@ fun Route.follow(followService: FollowService) {
             )
         } catch (e: Exception) {
             e.printStackTrace()
+            call.respond(
+                HttpStatusCode.OK,
+                Response(isSuccessful = false)
+            )
         }
     }
 }
@@ -68,6 +72,10 @@ fun Route.unfollow(followService: FollowService) {
             )
         } catch (e: Exception) {
             e.printStackTrace()
+            call.respond(
+                HttpStatusCode.OK,
+                Response(isSuccessful = false)
+            )
         }
     }
 }

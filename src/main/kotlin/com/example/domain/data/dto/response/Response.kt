@@ -1,4 +1,4 @@
-package com.example.domain.model.response
+package com.example.domain.data.dto.response
 
 data class Response(
     val isSuccessful: Boolean,

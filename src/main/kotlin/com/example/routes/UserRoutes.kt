@@ -1,12 +1,13 @@
 package com.example.routes
 
-import com.example.domain.model.Credential
-import com.example.domain.model.request.SignInRequest
-import com.example.service.user.UserService
-import com.example.domain.model.request.SignUpRequest
-import com.example.domain.model.response.Response
+import com.example.domain.data.dto.JwtProperties
+import com.example.domain.data.dto.request.SignInRequest
+import com.example.domain.data.dto.request.SignUpRequest
+import com.example.domain.data.dto.response.Response
+import com.example.domain.data.dto.response.SignInResponse
 import com.example.domain.util.AppException
 import com.example.domain.util.Constants
+import com.example.service.UserService
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -21,13 +22,8 @@ fun Route.signUp(userService: UserService) {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-
         try {
-            userService.add(
-                email = request.email,
-                username = request.username,
-                password = request.password
-            )
+            userService.add(request)
             call.respond(
                 HttpStatusCode.OK,
                 Response(
@@ -44,11 +40,18 @@ fun Route.signUp(userService: UserService) {
             )
         } catch (e: Exception) {
             e.printStackTrace()
+            call.respond(
+                HttpStatusCode.OK,
+                Response(isSuccessful = false)
+            )
         }
     }
 }
 
-fun Route.signIn(userService: UserService) {
+fun Route.signIn(
+    userService: UserService,
+    jwtProperties: JwtProperties
+) {
     post(Constants.Routes.User.SIGN_IN) {
         val request =
             call.receiveOrNull<SignInRequest>()
@@ -57,14 +60,13 @@ fun Route.signIn(userService: UserService) {
                     return@post
                 }
         try {
-            val credential = Credential(
-                emailOrUsername = request.emailOrUsername,
-                password = request.password
+            val token = userService.signIn(
+                request = request,
+                jwtProperties = jwtProperties
             )
-            userService.findByCredentials(credential)
             call.respond(
                 HttpStatusCode.OK,
-                Response(isSuccessful = true)
+                SignInResponse(token = token)
             )
         } catch (e: AppException) {
             call.respond(
@@ -76,6 +78,10 @@ fun Route.signIn(userService: UserService) {
             )
         } catch (e: Exception) {
             e.printStackTrace()
+            call.respond(
+                HttpStatusCode.OK,
+                Response(isSuccessful = false)
+            )
         }
     }
 }

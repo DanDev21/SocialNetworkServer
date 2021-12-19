@@ -1,6 +1,5 @@
 package com.example.repository.user
 
-import com.example.domain.model.Credential
 import com.example.domain.model.User
 import com.example.domain.util.AppException
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -31,13 +30,16 @@ class UserRepositoryImpl(
     override suspend fun findByUsername(username: String) =
         users.findOne(User::username eq username)
 
-    override suspend fun findByCredentials(credential: Credential): User {
-        val user = users.findOne(User::password eq credential.password)
-        if (user != null) {
-            if (user.email == credential.emailOrUsername ||
-                user.username == credential.emailOrUsername) {
-                return user
-            } else throw AppException.Repo.CredentialsDoNotMatch
-        } else throw AppException.Repo.CredentialsDoNotMatch
+    override suspend fun findByCredentials(
+        emailOrUsername: String,
+        password: String
+    ): User {
+        val user = users.findOne(User::password eq password)
+            ?: throw AppException.Repo.CredentialsDoNotMatch
+        if (user.email != emailOrUsername &&
+            user.username != emailOrUsername) {
+            throw AppException.Repo.CredentialsDoNotMatch
+        }
+        return user
     }
 }

@@ -1,4 +1,4 @@
-.idea
-.gradle
-/build
+/.idea/
+/.gradle/
+/build/
 /src/main/resources/application.conf

@@ -3,23 +3,23 @@ package com.example.domain.validation
 import com.example.domain.model.Post
 import com.example.domain.model.User
 import com.example.domain.util.AppException
-import com.example.domain.util.Constants
+import com.example.domain.util.AppException.Messages.Validation
 
-class PostValidator : Validator<Post> {
-
-    lateinit var findUserById: suspend (String) -> User?
+class PostValidator(
+    private val findUserById: suspend (String) -> User?
+) : Validator<Post> {
 
     override suspend fun validate(entity: Post) {
         if (entity.authorId.isBlank()) {
-            throw AppException.InvalidException(Constants.Error.Invalid.ID)
+            throw AppException.InvalidException(Validation.ID)
         }
 
         if (findUserById(entity.authorId) == null) {
-            throw AppException.InvalidException(Constants.Error.Invalid.ID)
+            throw AppException.InvalidException(Validation.ID)
         }
 
         if (entity.imageUrl.isBlank()) {
-            throw AppException.InvalidException(Constants.Error.Invalid.FIELD)
+            throw AppException.InvalidException(Validation.FIELD)
         }
     }
 }

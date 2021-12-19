@@ -2,11 +2,7 @@ package com.example
 
 import com.example.di.mainModule
 import io.ktor.application.*
-import com.example.domain.plugins.*
-import com.example.plugins.configureHTTP
-import com.example.plugins.configureMonitoring
-import com.example.plugins.configureRouting
-import com.example.plugins.configureSerialization
+import com.example.plugins.*
 import org.koin.ktor.ext.Koin
 
 fun main(args: Array<String>): Unit =
@@ -19,8 +15,8 @@ fun Application.module() {
             mainModule
         )
     }
-//    configureSecurity()
-//    configureSockets()
+    configureSecurity()
+    configureSockets()
     configureHTTP()
     configureRouting()
     configureMonitoring()

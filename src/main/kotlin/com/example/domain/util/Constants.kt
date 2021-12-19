@@ -2,6 +2,10 @@ package com.example.domain.util
 
 object Constants {
 
+    object Time {
+        const val ONE_YEAR = 1000L * 60L * 60L * 24L * 365L
+    }
+
     object Length {
 
         const val POST_PAGE = 20
@@ -16,23 +20,8 @@ object Constants {
         const val NAME = "social_network"
     }
 
-    object Error {
-
-        object Repository {
-            const val EMAIL_TAKEN = "This email is already used."
-            const val USERNAME_TAKEN = "This username is already used."
-            const val CREDENTIALS_DO_NOT_MATCH = "The username and the password don't match."
-
-            const val ALREADY_FOLLOW = "You already follow this person."
-        }
-
-        object Invalid {
-            const val ID = "Invalid id."
-            const val FIELD = "Invalid field."
-            const val EMAIL = "The provided email address is invalid."
-            const val USERNAME = "The username's length has to be longer than ${Length.Min.USERNAME} characters."
-            const val PASSWORD = "The password's length has to be longer than ${Length.Min.PASSWORD} characters."
-        }
+    object Authentication {
+        const val ID = "user_id"
     }
 
     object Routes {

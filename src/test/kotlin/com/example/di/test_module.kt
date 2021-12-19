@@ -1,7 +1,7 @@
 package com.example.di
 
 import com.example.repository.user.FakeUserRepository
-import com.example.service.user.UserServiceImpl
+import com.example.service.UserService
 import org.koin.dsl.module
 
 internal val testModule = module {
@@ -11,6 +11,6 @@ internal val testModule = module {
     }
 
     single {
-        UserServiceImpl(get<FakeUserRepository>())
+        UserService(get<FakeUserRepository>())
     }
 }

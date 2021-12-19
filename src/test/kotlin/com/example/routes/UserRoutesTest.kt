@@ -2,12 +2,12 @@ package com.example.routes
 
 import com.example.di.testModule
 import com.example.domain.model.Credential
-import com.example.domain.model.request.SignInRequest
-import com.example.domain.model.request.SignUpRequest
-import com.example.domain.model.response.Response
+import com.example.domain.data.dto.request.SignInRequest
+import com.example.domain.data.dto.request.SignUpRequest
+import com.example.domain.data.dto.response.Response
 import com.example.plugins.configureSerialization
 import com.example.domain.util.Constants
-import com.example.service.user.UserServiceImpl
+import com.example.service.UserService
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import io.ktor.application.*
@@ -25,7 +25,7 @@ import kotlin.test.BeforeTest
 
 class UserRoutesTest : KoinTest {
 
-    private val userService by inject<UserServiceImpl>()
+    private val userService by inject<UserService>()
 
     private val gson = Gson()
 
@@ -93,7 +93,7 @@ class UserRoutesTest : KoinTest {
                     emailOrUsername = "test@test.com",
                     password = "test_pass123"
                 )
-                val user = userService.findByCredentials(credential)
+                val user = userService.signIn(credential)
                 assertThat(user)
                     .isNotNull()
 

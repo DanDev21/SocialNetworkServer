@@ -1,4 +1,4 @@
-package com.example.domain.model.request
+package com.example.domain.data.dto.request
 
 data class SignInRequest(
     val emailOrUsername: String,

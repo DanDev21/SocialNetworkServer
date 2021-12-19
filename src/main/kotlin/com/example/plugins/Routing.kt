@@ -1,9 +1,10 @@
 package com.example.plugins
 
+import com.example.domain.data.dto.JwtProperties
 import com.example.routes.*
-import com.example.service.user.UserService
-import com.example.service.follow.FollowService
-import com.example.service.post.PostService
+import com.example.service.FollowService
+import com.example.service.PostService
+import com.example.service.UserService
 import io.ktor.routing.*
 import io.ktor.application.*
 import org.koin.ktor.ext.inject
@@ -14,10 +15,19 @@ fun Application.configureRouting() {
     val followService: FollowService by inject()
     val postService: PostService by inject()
 
+    val jwtProperties = JwtProperties(
+        issuer = environment.config.property("jwt.domain").toString(),
+        audience = environment.config.property("jwt.audience").toString(),
+        secret = environment.config.property("jwt.secret").toString()
+    )
+
     routing {
         // user routes
         signUp(userService)
-        signIn(userService)
+        signIn(
+            userService = userService,
+            jwtProperties = jwtProperties
+        )
 
         // follow routes
         follow(followService)

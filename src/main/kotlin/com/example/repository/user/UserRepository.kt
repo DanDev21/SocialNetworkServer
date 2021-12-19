@@ -1,6 +1,5 @@
 package com.example.repository.user
 
-import com.example.domain.model.Credential
 import com.example.domain.model.User
 import com.example.domain.util.AppException
 
@@ -16,5 +15,5 @@ interface UserRepository {
     suspend fun findByUsername(username: String): User?
 
     @Throws(AppException.Repo::class)
-    suspend fun findByCredentials(credential: Credential): User
+    suspend fun findByCredentials(emailOrUsername: String, password: String): User
 }
