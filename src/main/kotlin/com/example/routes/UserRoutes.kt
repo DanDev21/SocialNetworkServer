@@ -23,7 +23,7 @@ fun Route.signUp(userService: UserService) {
                     return@post
                 }
         try {
-            userService.add(request)
+            userService.signUp(request)
             call.respond(
                 HttpStatusCode.OK,
                 Response(

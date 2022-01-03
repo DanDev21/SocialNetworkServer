@@ -1,11 +1,9 @@
 package com.example.repository.follow
 
 import com.example.domain.model.Follow
-import com.example.domain.util.AppException
 
 interface FollowRepository {
 
-    @Throws(AppException.Repo::class)
     suspend fun add(follow: Follow)
 
     suspend fun findByIds(byWhoId: String, otherId: String): Follow?

@@ -1,9 +1,9 @@
 package com.example.domain.validation
 
 import com.example.domain.model.User
-import com.example.domain.util.AppException
-import com.example.domain.util.AppException.Messages.Validation
+import com.example.domain.util.AppException.InvalidException
 import com.example.domain.util.Constants
+import com.example.domain.util.Validation
 
 class UserValidator : Validator<User> {
 
@@ -16,7 +16,7 @@ class UserValidator : Validator<User> {
         }
 
         if (message.isNotEmpty()) {
-            throw AppException.InvalidException(message)
+            throw InvalidException(message)
         }
     }
 }

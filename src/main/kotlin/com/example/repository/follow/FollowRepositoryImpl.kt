@@ -2,7 +2,6 @@ package com.example.repository.follow
 
 import com.example.domain.model.Follow
 import com.example.domain.util.AppException
-import com.example.domain.util.Constants
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
@@ -15,7 +14,7 @@ class FollowRepositoryImpl(
 
     override suspend fun add(follow: Follow) {
         if (findByIds(follow.byWhoId, follow.otherId) != null) {
-            throw AppException.Repo.AlreadyFollow
+            throw AppException.Repository.AlreadyFollow
         }
         follows.insertOne(follow)
     }
@@ -40,5 +39,5 @@ class FollowRepositoryImpl(
                 Follow::byWhoId eq byWhoId,
                 Follow::otherId eq otherId
             )
-        ).deletedCount != 0L
+        ).deletedCount > 0
 }

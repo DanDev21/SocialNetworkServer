@@ -7,12 +7,13 @@ interface PostRepository {
 
     suspend fun add(post: Post): Boolean
 
-    suspend fun delete(id: String): Boolean
+    suspend fun delete(postId: String, authorId: String): Boolean
 
-    suspend fun getAll(
-        userId: String,
+    suspend fun findById(id: String): Post?
+
+    suspend fun getFriendsPosts(
         friendsIds: List<String>,
-        page: Int = 0,
+        pageNumber: Int = 0,
         pageSize: Int = Constants.Length.POST_PAGE
     ): List<Post>
 }

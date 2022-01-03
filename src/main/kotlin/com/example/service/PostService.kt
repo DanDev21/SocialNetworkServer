@@ -2,22 +2,25 @@ package com.example.service
 
 import com.example.domain.model.Post
 import com.example.domain.data.dto.request.CreatePostRequest
+import com.example.domain.data.dto.request.DeletePostRequest
 import com.example.domain.validation.PostValidator
-import com.example.repository.follow.FollowRepository
 import com.example.repository.post.PostRepository
 import com.example.repository.user.UserRepository
 
 class PostService(
     private val postRepository: PostRepository,
-    private val followRepository: FollowRepository,
-    private val userRepository: UserRepository
+    userRepository: UserRepository
 ) {
 
-    private val postValidator = PostValidator(userRepository::findById)
+    private val postValidator =
+        PostValidator(userRepository::findById)
 
-    suspend fun add(request: CreatePostRequest) {
+    suspend fun add(
+        userId: String,
+        request: CreatePostRequest
+    ) {
         val post = Post(
-            authorId = request.authorId,
+            authorId = userId,
             description = request.description,
             imageUrl = request.imageUrl,
             timestamp = System.currentTimeMillis()
@@ -25,4 +28,20 @@ class PostService(
         postValidator.validate(post)
         postRepository.add(post)
     }
+
+    suspend fun delete(
+        userId: String,
+        request: DeletePostRequest
+    ) = postRepository
+        .delete(request.postId, userId)
+
+    suspend fun getFriendsPosts(
+        friendsIds: List<String>,
+        pageNumber: Int,
+        pageSize: Int,
+    ) = postRepository.getFriendsPosts(
+            friendsIds = friendsIds,
+            pageNumber = pageNumber,
+            pageSize = pageSize
+        )
 }

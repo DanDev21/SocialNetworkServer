@@ -3,11 +3,13 @@ package com.example.domain.model
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
-data class Activity(
-    val authorUsername: String,
-    val actionType: Int,
-    val targetType: Int,
-    val targetId: String,
+data class Comment(
+    val body: String,
+    val postId: String,
+    val simpleUser: SimpleUser,
+    val authorId: String,
+    val timestamp: Long,
+    val likes: Int,
     @BsonId
     val id: String = ObjectId().toString()
 )
