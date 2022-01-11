@@ -20,7 +20,7 @@ fun Route.createPost(
     postService: PostService,
 ) {
     authenticate {
-        post(Constants.Routes.Post.CREATE_POST) {
+        post(Routes.Post.CREATE_POST) {
             val request = call.receiveOrNull<CreatePostRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
@@ -50,7 +50,7 @@ fun Route.deletePost(
     postController: PostController
 ) {
     authenticate {
-        delete(Constants.Routes.Post.DELETE_POST) {
+        delete(Routes.Post.DELETE_POST) {
             val request = call.receiveOrNull<DeletePostRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
@@ -73,7 +73,7 @@ fun Route.getFriendsPosts(
     postService: PostService
 ) {
     authenticate {
-        get(Constants.Routes.Post.GET_FRIENDS_POSTS) {
+        get(Routes.Post.GET_FRIENDS_POSTS) {
             val pageNumber = call.parameters[RequestParam.PAGE_NUMBER]
                 ?.toIntOrNull()
                 ?: 0

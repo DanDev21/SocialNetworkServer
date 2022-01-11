@@ -17,7 +17,7 @@ fun Route.createComment(
     commentService: CommentService
 ) {
     authenticate {
-        post(Constants.Routes.Comment.CREATE) {
+        post(Routes.Comment.CREATE) {
             val request = call.receiveOrNull<CommentRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
@@ -38,7 +38,7 @@ fun Route.deleteComment(
     postController: PostController
 ) {
     authenticate {
-        delete(Constants.Routes.Comment.DELETE) {
+        delete(Routes.Comment.DELETE) {
             val request = call.receiveOrNull<DeleteCommentRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
@@ -60,7 +60,7 @@ fun Route.getPostsComments(
     commentService: CommentService
 ) {
     authenticate {
-        get(Constants.Routes.Comment.GET_POST_COMMENTS) {
+        get(Routes.Comment.GET_POST_COMMENTS) {
             val postId = call.parameters[Constants.RequestParam.POST_ID]
                 ?: ""
             try {

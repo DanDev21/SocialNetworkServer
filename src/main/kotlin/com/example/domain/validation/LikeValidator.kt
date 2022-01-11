@@ -1,11 +1,8 @@
 package com.example.domain.validation
 
-import com.example.domain.model.Comment
-import com.example.domain.model.Like
-import com.example.domain.model.Post
-import com.example.domain.model.User
+import com.example.domain.model.*
 import com.example.domain.util.AppException.InvalidException
-import com.example.domain.util.Constants
+import com.example.domain.util.TargetType
 import com.example.domain.util.Validation
 
 class LikeValidator(
@@ -21,18 +18,18 @@ class LikeValidator(
             message += Validation.USER_ID
         }
 
-        when (entity.targetType) {
-            Constants.Target.POST.ordinal -> {
+        when (TargetType.fromInt(entity.targetType)) {
+            TargetType.Post -> {
                 if (findPostById(entity.targetId) == null) {
                     message += Validation.TARGET_ID
                 }
             }
-            Constants.Target.COMMENT.ordinal -> {
+            TargetType.Comment -> {
                 if (findCommentById(entity.targetId) == null) {
                     message += Validation.TARGET_ID
                 }
             }
-            else -> message += Validation.TARGET_TYPE
+            TargetType.Default -> message += Validation.TARGET_TYPE
         }
 
         if (message.isNotEmpty()) {
