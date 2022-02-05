@@ -1,0 +1,31 @@
+package com.example.domain.util
+
+object Repo {
+    const val EMAIL_OR_USERNAME_TAKEN = "The email or the username is already used."
+    const val ALREADY_FOLLOW = "You already follow this person."
+    const val ALREADY_LIKED = "You already liked this."
+}
+
+object Validation {
+    const val USER_ID = "Invalid user id."
+    const val TARGET_ID = "Invalid target id."
+    const val TARGET_INT = "Invalid target ordinal."
+    const val FIELD_EMPTY = "Empty field."
+    const val FIELD = "Invalid field."
+    const val URL = "Invalid url."
+    const val FIELD_LENGTH_EXCEEDED = "Field's length has been exceeded."
+    const val EMAIL = "The provided email address is invalid."
+    const val USERNAME = "The username's length has to be longer than ${Length.Min.USERNAME} characters."
+    const val PASSWORD = "The password's length has to be longer than ${Length.Min.PASSWORD} characters."
+    const val ACTION_INT = "Invalid action ordinal."
+    const val NULL_PARAM = "null parameter."
+    const val NULL_REQUEST = "null request."
+}
+
+object Authorization {
+    const val EMAIL_OR_USERNAME_CANNOT_BE_FOUND = "The email/username provided does not exist."
+    const val CREDENTIALS_DO_NOT_MATCH = "The email/username doesn't match the password."
+    const val UNAUTHORIZED_REQUEST = "You're not who you say you are."
+    const val TOKEN_ID = "Cannot extract the user id from request"
+}
+

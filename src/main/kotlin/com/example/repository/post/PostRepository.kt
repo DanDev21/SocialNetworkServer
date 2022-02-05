@@ -1,19 +1,20 @@
 package com.example.repository.post
 
+import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.Post
-import com.example.domain.util.Constants
+import com.example.domain.util.Length
 
 interface PostRepository {
 
-    suspend fun add(post: Post): Boolean
+    suspend fun add(post: Post): InsertResult<Post>
 
-    suspend fun delete(postId: String, authorId: String): Boolean
+    suspend fun findById(id: String): FindResult<Post>
 
-    suspend fun findById(id: String): Post?
+    suspend fun delete(postId: String, authorId: String): DeleteResult<Post>
 
-    suspend fun getFriendsPosts(
-        friendsIds: List<String>,
+    suspend fun getAll(
         pageNumber: Int = 0,
-        pageSize: Int = Constants.Length.POST_PAGE
-    ): List<Post>
+        pageSize: Int = Length.POST_PAGE,
+        followedUsersIds: List<String>,
+    ): FindManyResult<Post>
 }

@@ -6,7 +6,7 @@ import org.bson.types.ObjectId
 data class Comment(
     val body: String,
     val postId: String,
-    val simpleUser: SimpleUser,
+    val author: SimpleUser,
     val authorId: String,
     val timestamp: Long,
     val likes: Int,

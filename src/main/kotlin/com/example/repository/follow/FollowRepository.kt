@@ -1,16 +1,19 @@
 package com.example.repository.follow
 
+import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.Follow
 
 interface FollowRepository {
 
-    suspend fun add(follow: Follow)
+    suspend fun add(follow: Follow): InsertResult<Follow>
 
-    suspend fun findByIds(byWhoId: String, otherId: String): Follow?
+    suspend fun findById(id: String): FindResult<Follow>
 
-    suspend fun findByByWhoId(id: String): List<Follow>
+    suspend fun findByIds(userId: String, otherUserId: String): FindResult<Follow>
 
-    suspend fun findByOtherId(id: String): List<Follow>
+    suspend fun findByFollowerId(id: String): FindManyResult<Follow>
 
-    suspend fun delete(byWhoId: String, otherId: String): Boolean
+    suspend fun findByFollowedUserId(id: String): FindManyResult<Follow>
+
+    suspend fun delete(followerId: String, followedUserId: String): DeleteResult<Follow>
 }

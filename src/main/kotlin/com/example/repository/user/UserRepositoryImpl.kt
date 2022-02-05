@@ -1,10 +1,13 @@
 package com.example.repository.user
 
+import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.User
-import com.example.domain.util.AppException.Repository
+import com.example.domain.util.AppException.RepositoryException
+import com.example.domain.util.Repo
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 import org.litote.kmongo.or
+import org.litote.kmongo.regex
 
 class UserRepositoryImpl(
     database: CoroutineDatabase
@@ -12,26 +15,42 @@ class UserRepositoryImpl(
 
     private val users = database.getCollection<User>()
 
-    override suspend fun add(user: User) {
-        if (findByCredentials(user.email, user.username) != null) {
-            throw Repository.EmailOrUsernameTaken
+    override suspend fun add(user: User): InsertResult<User> {
+        if (exists(user)) {
+            throw RepositoryException(Repo.EMAIL_OR_USERNAME_TAKEN)
         }
-        users.insertOne(user)
+        return InsertResult(
+            succeeded = users.insertOne(user).wasAcknowledged(),
+            obj = user
+        )
     }
 
-    override suspend fun findById(id: String) =
-        users.findOneById(id)
+    private suspend fun exists(user: User) =
+        users.findOne(
+            or(
+                User::email eq  user.email,
+                User::username eq user.username
+            )
+        ) != null
 
-    override suspend fun findByCredentials(
-        email: String,
-        username: String
-    ) = users.findOne(
-        or(
-            User::email eq email,
-            User::username eq username
-        )
+    override suspend fun findById(id: String) = FindResult(
+        obj = users.findOneById(id)
     )
 
-    override suspend fun findByUsername(username: String) =
-        users.findOne(User::username eq username)
+    override suspend fun findByUsername(regex: String) = FindManyResult(
+        items = users.find(
+            User::username regex Regex("(?i).*$regex.*")
+        )
+            .descendingSort()
+            .toList()
+    )
+
+    override suspend fun findByEmailOrUsername(emailOrUsername: String) = FindResult(
+        obj = users.findOne(
+            or(
+                User::email eq emailOrUsername,
+                User::username eq emailOrUsername
+            )
+        )
+    )
 }

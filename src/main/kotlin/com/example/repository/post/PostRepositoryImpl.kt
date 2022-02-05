@@ -1,5 +1,6 @@
 package com.example.repository.post
 
+import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.Post
 import org.litote.kmongo.`in`
 import org.litote.kmongo.and
@@ -12,28 +13,36 @@ class PostRepositoryImpl(
 
     private val posts = database.getCollection<Post>()
 
-    override suspend fun add(post: Post) =
-        posts.insertOne(post).wasAcknowledged()
+    override suspend fun add(post: Post) = InsertResult(
+        succeeded = posts.insertOne(post).wasAcknowledged(),
+        obj = post
+    )
 
-    override suspend fun delete(postId: String, authorId: String) =
-        posts.deleteOne(
+    override suspend fun findById(id: String) = FindResult(
+        obj = posts.findOneById(id)
+    )
+
+    override suspend fun delete(
+        postId: String,
+        authorId: String
+    ) = DeleteResult<Post>(
+        deleteCount = posts.deleteOne(
             and(
                 Post::id eq postId,
                 Post::authorId eq authorId
             )
-        ).deletedCount > 0
+        ).deletedCount
+    )
 
-    override suspend fun findById(id: String) =
-        posts.findOne(Post::id eq id)
-
-    override suspend fun getFriendsPosts(
-        friendsIds: List<String>,
+    override suspend fun getAll(
         pageNumber: Int,
-        pageSize: Int
-    ): List<Post> =
-        posts.find(Post::authorId `in` friendsIds)
+        pageSize: Int,
+        followedUsersIds: List<String>
+    ) = FindManyResult(
+        items = posts.find(Post::authorId `in` followedUsersIds)
             .skip(pageNumber * pageSize)
             .limit(pageSize)
             .descendingSort(Post::timestamp)
             .toList()
+    )
 }

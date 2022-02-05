@@ -4,10 +4,10 @@ import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
 data class Like(
-    val userId: String,
+    val targetInt: Int,
+    val authorId: String,
     val targetId: String,
-    val targetType: Int,
     val timestamp: Long,
     @BsonId
-    val id: String = ObjectId().toString()
+    val id: String = ObjectId().toString(),
 )

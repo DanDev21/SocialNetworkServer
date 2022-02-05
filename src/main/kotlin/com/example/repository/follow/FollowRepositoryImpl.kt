@@ -1,10 +1,13 @@
 package com.example.repository.follow
 
+import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.Follow
-import com.example.domain.util.AppException
+import com.example.domain.util.AppException.RepositoryException
+import com.example.domain.util.Repo
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
+import org.litote.kmongo.or
 
 class FollowRepositoryImpl(
     database: CoroutineDatabase
@@ -12,32 +15,58 @@ class FollowRepositoryImpl(
 
     private val follows = database.getCollection<Follow>()
 
-    override suspend fun add(follow: Follow) {
-        if (findByIds(follow.byWhoId, follow.otherId) != null) {
-            throw AppException.Repository.AlreadyFollow
+    override suspend fun add(follow: Follow): InsertResult<Follow> {
+        if (exists(follow)) {
+            throw RepositoryException(Repo.ALREADY_FOLLOW)
         }
-        follows.insertOne(follow)
+        return InsertResult(
+            succeeded = follows.insertOne(follow).wasAcknowledged(),
+            obj = follow
+        )
     }
 
-    override suspend fun findByIds(byWhoId: String, otherId: String) =
-        follows.findOne(
-            and(
-                Follow::byWhoId eq byWhoId,
-                Follow::otherId eq otherId
+    private suspend fun exists(follow: Follow) =
+        findByIds(follow.followerId, follow.followedUserId).founded
+
+    override suspend fun findById(id: String) = FindResult(
+        obj = follows.findOneById(id)
+    )
+
+    override suspend fun findByIds(
+        userId: String,
+        otherUserId: String
+    ) = FindResult(
+        obj = follows.findOne(
+            or(
+                and(
+                    Follow::followerId eq userId,
+                    Follow::followedUserId eq otherUserId
+                ),
+                and(
+                    Follow::followedUserId eq otherUserId,
+                    Follow::followerId eq userId
+                )
             )
         )
+    )
 
-    override suspend fun findByByWhoId(id: String) =
-        follows.find(Follow::byWhoId eq id).toList()
+    override suspend fun findByFollowerId(id: String) = FindManyResult(
+        items = follows.find(Follow::followerId eq id).toList()
+    )
 
-    override suspend fun findByOtherId(id: String) =
-        follows.find(Follow::otherId eq id).toList()
+    override suspend fun findByFollowedUserId(id: String) = FindManyResult(
+        items = follows.find(Follow::followedUserId eq id).toList()
+    )
 
-    override suspend fun delete(byWhoId: String, otherId: String) =
-        follows.deleteOne(
+    override suspend fun delete(
+        followerId: String,
+        followedUserId: String
+    ) = DeleteResult<Follow>(
+        deleteCount = follows.deleteOne(
             and(
-                Follow::byWhoId eq byWhoId,
-                Follow::otherId eq otherId
+                Follow::followerId eq followerId,
+                Follow::followedUserId eq followedUserId
             )
-        ).deletedCount > 0
+        ).deletedCount
+    )
 }

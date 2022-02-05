@@ -1,56 +1,105 @@
 package com.example.plugins
 
-import com.example.controller.PostController
-import com.example.domain.data.dto.JwtProperties
+import com.example.controller.post.ActivityController
+import com.example.controller.post.PostController
+import com.example.domain.data.dto.jwt.JwtProperties
+import com.example.domain.util.Property
 import com.example.routes.*
-import com.example.service.*
+import com.example.use_case.activity.GetActivities
+import com.example.use_case.comment.GetComments
+import com.example.use_case.follow.CreateFollow
+import com.example.use_case.follow.DeleteFollow
+import com.example.use_case.like.DeleteLikes
+import com.example.use_case.post.CreatePost
+import com.example.use_case.user.FindUsers
+import com.example.use_case.user.SignIn
+import com.example.use_case.user.SignUp
 import io.ktor.routing.*
 import io.ktor.application.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
-
-    val userService: UserService by inject()
-    val followService: FollowService by inject()
-    val postService: PostService by inject()
-    val likeService: LikeService by inject()
-    val commentService: CommentService by inject()
-
     val postController: PostController by inject()
+    val activityController: ActivityController by inject()
 
+    configureUserRoutes()
+    configureFollowRoutes()
+    configurePostRoutes(postController)
+    configureCommentRoutes(postController, activityController)
+    configureLikeRoutes(activityController)
+    configureActivityRoutes()
+}
+
+private fun Application.configureUserRoutes() {
+    val signUpUseCase: SignUp by inject()
+    val signInUseCase: SignIn by inject()
+    val findUsersUseCase: FindUsers by inject()
     val jwtProperties = JwtProperties(
-        issuer = environment.config.property("jwt.domain").toString(),
-        audience = environment.config.property("jwt.audience").toString(),
-        secret = environment.config.property("jwt.secret").toString()
+        issuer = environment.config.property(Property.DOMAIN).toString(),
+        audience = environment.config.property(Property.AUDIENCE).toString(),
+        secret = environment.config.property(Property.SECRET).toString()
     )
 
     routing {
-        // user routes
-        signUp(userService)
+        signUp(signUpUseCase)
         signIn(
-            userService = userService,
+            signIn = signInUseCase,
             jwtProperties = jwtProperties
         )
+        findUsers(findUsersUseCase)
+    }
+}
 
-        // follow routes
-        follow(followService)
-        unfollow(followService)
+private fun Application.configureFollowRoutes() {
+    val createFollow: CreateFollow by inject()
+    val deleteFollow: DeleteFollow by inject()
 
-        // posts routes
-        createPost(postService)
+    routing {
+        follow(createFollow)
+        unfollow(deleteFollow)
+    }
+}
+
+private fun Application.configurePostRoutes(
+    postController: PostController
+) {
+    val createPostUseCase: CreatePost by inject()
+
+    routing {
+        createPost(createPostUseCase)
         deletePost(postController)
-        getFriendsPosts(
-            followService = followService,
-            postService = postService
-        )
+        getPosts(postController)
+    }
+}
 
-        // like routes
-        like(likeService)
-        unlike(likeService)
+private fun Application.configureCommentRoutes(
+    postController: PostController,
+    activityController: ActivityController
+) {
+    val getCommentsUseCase: GetComments by inject()
 
-        // comment routes
-        createComment(commentService)
+    routing {
+        createComment(activityController)
         deleteComment(postController)
-        getPostsComments(commentService)
+        getComments(getCommentsUseCase)
+    }
+}
+
+private fun Application.configureLikeRoutes(
+    activityController: ActivityController
+) {
+    val deleteLikes: DeleteLikes by inject()
+
+    routing {
+        like(activityController)
+        unlike(deleteLikes)
+    }
+}
+
+private fun Application.configureActivityRoutes() {
+    val getActivitiesUseCase: GetActivities by inject()
+
+    routing {
+        getUserActivity(getActivitiesUseCase)
     }
 }

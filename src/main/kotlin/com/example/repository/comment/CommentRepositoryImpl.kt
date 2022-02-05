@@ -1,5 +1,6 @@
 package com.example.repository.comment
 
+import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.Comment
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -11,29 +12,32 @@ class CommentRepositoryImpl(
 
     private val comments = database.getCollection<Comment>()
 
-    override suspend fun add(comment: Comment) {
-        comments.insertOne(comment)
-    }
+    override suspend fun add(comment: Comment) = InsertResult(
+        succeeded = comments.insertOne(comment).wasAcknowledged(),
+        obj = comment
+    )
 
-    override suspend fun findById(id: String) =
-        comments.findOne(Comment::id eq id)
+    override suspend fun findById(id: String) = FindResult(
+        obj = comments.findOneById(id)
+    )
 
     override suspend fun delete(
         id: String,
         authorId: String
-    ): Boolean {
-        return comments.deleteOne(
+    ) = DeleteResult<Comment>(
+        deleteCount = comments.deleteOne(
             and(
                 Comment::id eq id,
                 Comment::authorId eq authorId
             )
-        ).deletedCount > 0
-    }
+        ).deletedCount
+    )
 
     override suspend fun delete(postId: String) {
-        comments.deleteOne(Comment::postId eq postId)
+        comments.deleteMany(Comment::postId eq postId)
     }
 
-    override suspend fun getAll(postId: String) =
-        comments.find(Comment::postId eq postId).toList()
+    override suspend fun getAll(postId: String) = FindManyResult(
+        items = comments.find(Comment::postId eq postId).toList()
+    )
 }

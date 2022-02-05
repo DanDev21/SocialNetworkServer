@@ -1,17 +1,15 @@
 package com.example.repository.user
 
+import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.User
 
 interface UserRepository {
 
-    suspend fun add(user: User)
+    suspend fun add(user: User): InsertResult<User>
 
-    suspend fun findById(id: String): User?
+    suspend fun findById(id: String): FindResult<User>
 
-    suspend fun findByCredentials(email: String, username: String): User?
+    suspend fun findByUsername(regex: String): FindManyResult<User>
 
-    suspend fun findByCredentials(emailOrUsername: String) =
-        findByCredentials(emailOrUsername, emailOrUsername)
-
-    suspend fun findByUsername(username: String): User?
+    suspend fun findByEmailOrUsername(emailOrUsername: String): FindResult<User>
 }

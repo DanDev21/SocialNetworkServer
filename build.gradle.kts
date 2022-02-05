@@ -44,7 +44,6 @@ dependencies {
 
     // ktor - websockets
     implementation("io.ktor:ktor-websockets:$ktor_version")
-
     implementation("io.ktor:ktor-server-netty:$ktor_version")
 
     // ktor - logback
