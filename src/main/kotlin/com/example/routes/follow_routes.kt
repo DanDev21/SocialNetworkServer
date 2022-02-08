@@ -5,7 +5,7 @@ import com.example.domain.data.dto.request.follow.UnfollowRequest
 import com.example.domain.util.AppException
 import com.example.domain.util.Routes
 import com.example.domain.util.extensions.receive
-import com.example.domain.util.extensions.userId
+import com.example.domain.util.extensions.requesterId
 import com.example.use_case.follow.CreateFollow
 import com.example.use_case.follow.DeleteFollow
 import io.ktor.application.*
@@ -19,7 +19,7 @@ fun Route.follow(
         post(Routes.Follow.FOLLOW_USER) {
             try {
                 val request = call.receive<FollowRequest>()
-                createFollow(request, call.userId)
+                createFollow(request, call.requesterId)
             } catch (e: AppException) {
                 TODO()
             } catch (e: Exception) {
@@ -34,7 +34,7 @@ fun Route.unfollow(deleteFollow: DeleteFollow) {
         delete(Routes.Follow.UNFOLLOW) {
             try {
                 val request = call.receive<UnfollowRequest>()
-                deleteFollow(request, call.userId)
+                deleteFollow(request, call.requesterId)
             } catch (e: AppException) {
                 TODO()
             } catch (e: Exception) {

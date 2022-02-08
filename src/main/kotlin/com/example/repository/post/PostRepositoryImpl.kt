@@ -45,4 +45,16 @@ class PostRepositoryImpl(
             .descendingSort(Post::timestamp)
             .toList()
     )
+
+    override suspend fun getAll(
+        pageNumber: Int,
+        pageSize: Int,
+        authorId: String
+    ) = FindManyResult(
+        items = posts.find(Post::authorId eq authorId)
+            .skip(pageNumber * pageSize)
+            .limit(pageSize)
+            .descendingSort(Post::timestamp)
+            .toList()
+    )
 }

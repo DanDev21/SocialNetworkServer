@@ -11,7 +11,7 @@ sealed class CrudResult<T> {
     }
     data class DeleteResult<T>(val deleteCount: Long) : CrudResult<T>() {
 
-        fun didSomething() = deleteCount == 1L
+        fun wasAcknowledged() = deleteCount == 1L
     }
     data class FindManyResult<T>(val items: List<T>) : CrudResult<T>()
 }

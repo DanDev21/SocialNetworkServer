@@ -3,12 +3,17 @@ package com.example.use_case.user
 import com.example.repository.user.UserRepository
 
 class FindUsers(
-    private val repository: UserRepository
+    private val userRepository: UserRepository,
 ) {
 
-    suspend operator fun invoke(id: String) =
-        repository.findById(id)
+    suspend operator fun invoke(searchableId: String) =
+        userRepository.findById(searchableId)
 
-    suspend fun with(regex: String) =
-        repository.findByUsername(regex)
+    suspend operator fun invoke(
+        regex: String,
+        userId: String
+    ) = userRepository.findByUsername(
+        regex = regex,
+        id = userId
+    )
 }

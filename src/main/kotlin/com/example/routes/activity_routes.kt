@@ -5,13 +5,13 @@ import com.example.domain.util.Length
 import com.example.domain.util.Routes
 import com.example.domain.util.extensions.pageNumber
 import com.example.domain.util.extensions.pageSize
-import com.example.domain.util.extensions.userId
+import com.example.domain.util.extensions.requesterId
 import com.example.use_case.activity.GetActivities
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
 
-fun Route.getUserActivity(
+fun Route.getActivities(
     getActivities: GetActivities
 ) {
     authenticate {
@@ -20,12 +20,13 @@ fun Route.getUserActivity(
                 val activities = getActivities(
                     pageNumber = call.pageNumber,
                     pageSize = call.pageSize ?: Length.ACTIVITY_PAGE,
-                    userId = call.userId
+                    userId = call.requesterId
                 )
+                TODO()
             } catch (e: AppException) {
-                // TODO: send response
+                TODO()
             } catch (e: Exception) {
-                // TODO: send response
+                TODO()
             }
         }
     }

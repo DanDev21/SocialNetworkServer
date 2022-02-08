@@ -11,6 +11,8 @@ interface FollowRepository {
 
     suspend fun findByIds(userId: String, otherUserId: String): FindResult<Follow>
 
+    suspend fun findByOrderedIds(followerId: String, followedUserId: String): FindResult<Follow>
+
     suspend fun findByFollowerId(id: String): FindManyResult<Follow>
 
     suspend fun findByFollowedUserId(id: String): FindManyResult<Follow>

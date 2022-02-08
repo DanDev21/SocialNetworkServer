@@ -10,6 +10,14 @@ data class Post(
     val imageUrl: String,
     val timestamp: Long,
 
+    val statistics: Statistics = Statistics(),
+
     @BsonId
     val id: String = ObjectId().toString(),
-)
+) {
+
+    data class Statistics(
+        val likesNo: Int = 0,
+        val commentsNo: Int = 0,
+    )
+}

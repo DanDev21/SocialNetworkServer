@@ -12,6 +12,8 @@ data class User(
     val contact: Contact = Contact(),
     val skills: List<String> = listOf(),
 
+    val statistics: Statistics = Statistics(),
+
     @BsonId
     val id: String = ObjectId().toString(),
 ) {
@@ -24,5 +26,11 @@ data class User(
         val github: String? = null,
         val linkedIn: String? = null,
         val instagram: String? = null
+    )
+
+    data class Statistics(
+        val followersNo: Int = 0,
+        val followedUsersNo: Int = 0,
+        val postsNo: Int = 0,
     )
 }

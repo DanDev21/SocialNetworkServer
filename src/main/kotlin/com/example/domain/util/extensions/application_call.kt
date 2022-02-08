@@ -11,28 +11,32 @@ import io.ktor.request.*
 
 // authentication
 
-private val JWTPrincipal.userId: String
-    get() = getClaim(Token.USER_ID, String::class)
+private val JWTPrincipal.requesterId: String
+    get() = getClaim(Token.REQUESTER_ID, String::class)
         ?: throw Exception(Authorization.TOKEN_ID)
 
-val ApplicationCall.userId: String
+val ApplicationCall.requesterId: String
     get() = principal<JWTPrincipal>()
-        ?. userId
+        ?. requesterId
         ?: throw Exception(Authorization.TOKEN_ID)
 
 // requests parameters
 
+val ApplicationCall.userId: String
+    get() = parameters[RequestParams.OTHER_USER_ID]
+        ?: throw Exception(Validation.NULL_PARAM)
+
 val ApplicationCall.pageNumber: Int
-    get() = this.parameters[RequestParams.PAGE_NUMBER]
+    get() = parameters[RequestParams.PAGE_NUMBER]
         ?. toIntOrNull()
         ?: 0
 
 val ApplicationCall.pageSize: Int?
-    get() = this.parameters[RequestParams.PAGE_SIZE]
+    get() = parameters[RequestParams.PAGE_SIZE]
         ?. toIntOrNull()
 
 val ApplicationCall.postId: String
-    get() = this.parameters[RequestParams.POST_ID]
+    get() = parameters[RequestParams.POST_ID]
         ?: throw Exception(Validation.NULL_PARAM)
 
 val ApplicationCall.username: String

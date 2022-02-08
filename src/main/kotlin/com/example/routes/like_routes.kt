@@ -6,7 +6,7 @@ import com.example.domain.data.dto.request.like.UnlikeRequest
 import com.example.domain.util.AppException
 import com.example.domain.util.Routes
 import com.example.domain.util.extensions.receive
-import com.example.domain.util.extensions.userId
+import com.example.domain.util.extensions.requesterId
 import com.example.use_case.like.DeleteLikes
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -19,7 +19,7 @@ fun Route.like(
         post(Routes.Like.CREATE) {
             try {
                 val request = call.receive<LikeRequest>()
-                controller.like(request, call.userId)
+                controller.like(request, call.requesterId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response
@@ -37,7 +37,7 @@ fun Route.unlike(
         delete(Routes.Like.DELETE) {
             try {
                 val request = call.receive<UnlikeRequest>()
-                deleteLikes(request, call.userId)
+                deleteLikes(request, call.requesterId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response

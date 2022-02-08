@@ -2,15 +2,17 @@ package com.example.plugins
 
 import com.example.controller.post.ActivityController
 import com.example.controller.post.PostController
+import com.example.controller.user.UserController
 import com.example.domain.data.dto.jwt.JwtProperties
 import com.example.domain.util.Property
 import com.example.routes.*
 import com.example.use_case.activity.GetActivities
-import com.example.use_case.comment.GetComments
+import com.example.use_case.comment.FindComments
 import com.example.use_case.follow.CreateFollow
 import com.example.use_case.follow.DeleteFollow
 import com.example.use_case.like.DeleteLikes
 import com.example.use_case.post.CreatePost
+import com.example.use_case.post.FindPosts
 import com.example.use_case.user.FindUsers
 import com.example.use_case.user.SignIn
 import com.example.use_case.user.SignUp
@@ -19,10 +21,11 @@ import io.ktor.application.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
+    val userController: UserController by inject()
     val postController: PostController by inject()
     val activityController: ActivityController by inject()
 
-    configureUserRoutes()
+    configureUserRoutes(userController)
     configureFollowRoutes()
     configurePostRoutes(postController)
     configureCommentRoutes(postController, activityController)
@@ -30,7 +33,9 @@ fun Application.configureRouting() {
     configureActivityRoutes()
 }
 
-private fun Application.configureUserRoutes() {
+private fun Application.configureUserRoutes(
+    userController: UserController
+) {
     val signUpUseCase: SignUp by inject()
     val signInUseCase: SignIn by inject()
     val findUsersUseCase: FindUsers by inject()
@@ -47,6 +52,7 @@ private fun Application.configureUserRoutes() {
             jwtProperties = jwtProperties
         )
         findUsers(findUsersUseCase)
+        findProfile(userController)
     }
 }
 
@@ -64,11 +70,13 @@ private fun Application.configurePostRoutes(
     postController: PostController
 ) {
     val createPostUseCase: CreatePost by inject()
+    val findPostsUseCase: FindPosts by inject()
 
     routing {
         createPost(createPostUseCase)
         deletePost(postController)
         getPosts(postController)
+        getPosts(findPostsUseCase)
     }
 }
 
@@ -76,12 +84,12 @@ private fun Application.configureCommentRoutes(
     postController: PostController,
     activityController: ActivityController
 ) {
-    val getCommentsUseCase: GetComments by inject()
+    val findCommentsUseCase: FindComments by inject()
 
     routing {
         createComment(activityController)
         deleteComment(postController)
-        getComments(getCommentsUseCase)
+        getComments(findCommentsUseCase)
     }
 }
 
@@ -100,6 +108,6 @@ private fun Application.configureActivityRoutes() {
     val getActivitiesUseCase: GetActivities by inject()
 
     routing {
-        getUserActivity(getActivitiesUseCase)
+        getActivities(getActivitiesUseCase)
     }
 }

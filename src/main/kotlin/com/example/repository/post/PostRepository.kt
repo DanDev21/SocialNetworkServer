@@ -17,4 +17,10 @@ interface PostRepository {
         pageSize: Int = Length.POST_PAGE,
         followedUsersIds: List<String>,
     ): FindManyResult<Post>
+
+    suspend fun getAll(
+        pageNumber: Int = 0,
+        pageSize: Int = Length.POST_PAGE,
+        authorId: String,
+    ): FindManyResult<Post>
 }

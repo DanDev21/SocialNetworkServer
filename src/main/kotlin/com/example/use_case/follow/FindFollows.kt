@@ -8,4 +8,9 @@ class FindFollows(
 
     suspend operator fun invoke(followerId: String) =
         repository.findByFollowerId(followerId)
+
+    suspend operator fun invoke(
+        followerId: String,
+        followedUserId: String
+    ) = repository.findByOrderedIds(followerId, followedUserId)
 }

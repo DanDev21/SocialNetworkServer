@@ -50,6 +50,18 @@ class FollowRepositoryImpl(
         )
     )
 
+    override suspend fun findByOrderedIds(
+        followerId: String,
+        followedUserId: String
+    ) = FindResult(
+        obj = follows.findOne(
+            and(
+                Follow::followerId eq followerId,
+                Follow::followedUserId eq followedUserId
+            )
+        )
+    )
+
     override suspend fun findByFollowerId(id: String) = FindManyResult(
         items = follows.find(Follow::followerId eq id).toList()
     )

@@ -24,7 +24,7 @@ object Database {
 }
 
 object Token {
-    const val USER_ID = "user_id"
+    const val REQUESTER_ID = "requester_id"
 }
 
 object Property {
@@ -38,6 +38,7 @@ object RequestParams {
     const val PAGE_SIZE = "page_size"
     const val POST_ID = "post_id"
     const val USERNAME_RGX = "username_regex"
+    const val OTHER_USER_ID = "other_user_id"
 }
 
 object Target {
@@ -62,6 +63,7 @@ object Routes {
         const val SIGN_UP = "$USER/sign_up"
         const val SIGN_IN = "$USER/sign_in"
         const val FIND = "$USER/find"
+        const val FIND_PROFILE = "$USER/find_profile"
     }
 
     object Follow {
@@ -78,7 +80,8 @@ object Routes {
 
         const val CREATE_POST = "$POST/create"
         const val DELETE_POST = "$POST/delete"
-        const val GET_FRIENDS_POSTS = "$POST/get_friends_posts"
+        const val GET_FOLLOWED_USERS_POSTS = "$POST/get_friends_posts"
+        const val GET_USER_POSTS = "$POST/get_user_posts"
     }
 
     object Like {

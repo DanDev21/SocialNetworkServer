@@ -8,8 +8,8 @@ import com.example.domain.util.AppException
 import com.example.domain.util.Routes
 import com.example.domain.util.extensions.postId
 import com.example.domain.util.extensions.receive
-import com.example.domain.util.extensions.userId
-import com.example.use_case.comment.GetComments
+import com.example.domain.util.extensions.requesterId
+import com.example.use_case.comment.FindComments
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
@@ -21,7 +21,7 @@ fun Route.createComment(
         post(Routes.Comment.CREATE) {
             try {
                 val request = call.receive<CommentRequest>()
-                controller.comment(request, call.userId)
+                controller.comment(request, call.requesterId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response
@@ -39,7 +39,7 @@ fun Route.deleteComment(
         delete(Routes.Comment.DELETE) {
             try {
                 val request = call.receive<DeleteCommentRequest>()
-                controller.deleteComment(request, call.userId)
+                controller.deleteComment(request, call.requesterId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response
@@ -51,12 +51,12 @@ fun Route.deleteComment(
 }
 
 fun Route.getComments(
-    getComments: GetComments
+    findComments: FindComments
 ) {
     authenticate {
         get(Routes.Comment.GET_POST_COMMENTS) {
             try {
-                val comments = getComments(call.postId)
+                val comments = findComments(call.postId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response

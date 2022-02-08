@@ -35,7 +35,7 @@ class SignIn(
         jwtProperties: JwtProperties
     ) = JWT.create()
         .withExpiresAt(Date(System.currentTimeMillis() * Time.ONE_YEAR))
-        .withClaim(Token.USER_ID, user.id)
+        .withClaim(Token.REQUESTER_ID, user.id)
         .withIssuer(jwtProperties.issuer)
         .withAudience(jwtProperties.audience)
         .sign(Algorithm.HMAC256(jwtProperties.secret))
