@@ -1,4 +1,4 @@
-package com.example.di.module
+package com.example.core.di.module
 
 import com.example.repository.activity.ActivityRepository
 import com.example.repository.activity.ActivityRepositoryImpl

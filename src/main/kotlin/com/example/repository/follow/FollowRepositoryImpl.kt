@@ -2,7 +2,7 @@ package com.example.repository.follow
 
 import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.Follow
-import com.example.domain.util.AppException.RepositoryException
+import com.example.core.AppException.RepositoryException
 import com.example.domain.util.Repo
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase

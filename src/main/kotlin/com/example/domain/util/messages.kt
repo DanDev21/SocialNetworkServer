@@ -23,7 +23,6 @@ object Validation {
 }
 
 object Authorization {
-    const val EMAIL_OR_USERNAME_CANNOT_BE_FOUND = "The email/username provided does not exist."
     const val CREDENTIALS_DO_NOT_MATCH = "The email/username doesn't match the password."
     const val UNAUTHORIZED_REQUEST = "You're not who you say you are."
     const val TOKEN_ID = "Cannot extract the user id from request"

@@ -3,7 +3,7 @@ package com.example.validation
 import com.example.domain.data.dto.crud.CrudResult
 import com.example.domain.model.Post
 import com.example.domain.model.User
-import com.example.domain.util.AppException.InvalidException
+import com.example.core.AppException.InvalidException
 import com.example.domain.util.Validation
 
 class PostValidator(

@@ -3,7 +3,7 @@ package com.example.repository.like
 
 import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.Like
-import com.example.domain.util.AppException.RepositoryException
+import com.example.core.AppException.RepositoryException
 import com.example.domain.util.Repo
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase

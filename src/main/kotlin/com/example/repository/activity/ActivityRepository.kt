@@ -13,6 +13,6 @@ interface ActivityRepository {
     suspend fun getAll(
         pageNumber: Int = 0,
         pageSize: Int = Length.ACTIVITY_PAGE,
-        userId: String,
+        targetedUserId: String,
     ): FindManyResult<Activity>
 }

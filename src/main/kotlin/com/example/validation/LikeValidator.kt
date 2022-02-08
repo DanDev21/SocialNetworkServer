@@ -2,7 +2,7 @@ package com.example.validation
 
 import com.example.domain.data.dto.crud.CrudResult.FindResult
 import com.example.domain.model.*
-import com.example.domain.util.AppException.InvalidException
+import com.example.core.AppException.InvalidException
 import com.example.domain.util.Target
 import com.example.domain.util.Validation
 

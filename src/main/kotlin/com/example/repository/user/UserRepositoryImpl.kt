@@ -2,7 +2,7 @@ package com.example.repository.user
 
 import com.example.domain.data.dto.crud.CrudResult.*
 import com.example.domain.model.User
-import com.example.domain.util.AppException.RepositoryException
+import com.example.core.AppException.RepositoryException
 import com.example.domain.util.Repo
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -35,10 +35,13 @@ class UserRepositoryImpl(
         obj = users.findOneById(id)
     )
 
-    override suspend fun findByUsername(regex: String, id: String) = FindManyResult(
+    override suspend fun findByUsername(
+        regex: String,
+        requesterId: String
+    ) = FindManyResult(
         items = users.find(
             and(
-                User::id ne id,
+                User::id ne requesterId,
                 User::username regex Regex("(?i).*$regex.*"),
             )
         )

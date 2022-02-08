@@ -1,9 +1,8 @@
 package com.example
 
-import com.example.di.module.main
-import com.example.di.module.extra
-import com.example.di.module.repository
-import com.example.di.module.use_case.*
+import com.example.core.di.module.main
+import com.example.core.di.module.service
+import com.example.core.di.module.repository
 import io.ktor.application.*
 import com.example.plugins.*
 import org.koin.ktor.ext.Koin
@@ -17,13 +16,7 @@ fun Application.module() {
         modules(
             main,
             repository,
-            user,
-            follow,
-            post,
-            comment,
-            like,
-            activity,
-            extra
+            service
         )
     }
     configureSecurity()

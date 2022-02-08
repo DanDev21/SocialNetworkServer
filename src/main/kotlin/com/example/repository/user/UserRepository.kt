@@ -9,7 +9,7 @@ interface UserRepository {
 
     suspend fun findById(id: String): FindResult<User>
 
-    suspend fun findByUsername(regex: String, id: String): FindManyResult<User>
+    suspend fun findByUsername(regex: String, requesterId: String): FindManyResult<User>
 
     suspend fun findByEmailOrUsername(emailOrUsername: String): FindResult<User>
 }

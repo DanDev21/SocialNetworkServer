@@ -1,27 +1,31 @@
 package com.example.routes
 
-import com.example.controller.post.ActivityController
-import com.example.controller.post.PostController
 import com.example.domain.data.dto.request.comment.CommentRequest
 import com.example.domain.data.dto.request.comment.DeleteCommentRequest
-import com.example.domain.util.AppException
+import com.example.core.AppException
 import com.example.domain.util.Routes
 import com.example.domain.util.extensions.postId
 import com.example.domain.util.extensions.receive
 import com.example.domain.util.extensions.requesterId
-import com.example.use_case.comment.FindComments
+import com.example.service.ActivityService
+import com.example.service.CommentService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
 
 fun Route.createComment(
-    controller: ActivityController
+    commentService: CommentService,
+    activityService: ActivityService,
 ) {
     authenticate {
         post(Routes.Comment.CREATE) {
             try {
                 val request = call.receive<CommentRequest>()
-                controller.comment(request, call.requesterId)
+                val result = commentService.add(request, call.requesterId)
+
+                if (result.succeeded) {
+                    activityService.add(request, call.requesterId)
+                }
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response
@@ -33,13 +37,13 @@ fun Route.createComment(
 }
 
 fun Route.deleteComment(
-    controller: PostController
+    commentService: CommentService,
 ) {
     authenticate {
         delete(Routes.Comment.DELETE) {
             try {
                 val request = call.receive<DeleteCommentRequest>()
-                controller.deleteComment(request, call.requesterId)
+                val result = commentService.delete(request, call.requesterId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response
@@ -51,12 +55,12 @@ fun Route.deleteComment(
 }
 
 fun Route.getComments(
-    findComments: FindComments
+    commentService: CommentService,
 ) {
     authenticate {
         get(Routes.Comment.GET_POST_COMMENTS) {
             try {
-                val comments = findComments(call.postId)
+                val comments = commentService.getPostComments(call.postId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response

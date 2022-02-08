@@ -1,4 +1,4 @@
-package com.example.di.module
+package com.example.core.di.module
 
 import com.example.domain.util.Database
 import org.koin.dsl.module

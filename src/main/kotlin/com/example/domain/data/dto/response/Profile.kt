@@ -1,10 +1,10 @@
 package com.example.domain.data.dto.response
 
-data class ProfileResponse(
+data class Profile(
     val email: String,
     val username: String,
 
-    val bioText: String? = null,
+    val bio: String? = null,
     val profileImageUrl: String? = null,
 
     val skills: List<String>,

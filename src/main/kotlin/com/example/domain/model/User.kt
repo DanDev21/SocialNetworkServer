@@ -8,29 +8,19 @@ data class User(
     val username: String,
     val password: String,
 
-    val bio: Bio = Bio(),
-    val contact: Contact = Contact(),
+    val bio: String? = null,
+    val profileImageUrl: String? = null,
+
+    val github: String? = null,
+    val linkedIn: String? = null,
+    val instagram: String? = null,
+
     val skills: List<String> = listOf(),
 
-    val statistics: Statistics = Statistics(),
+    val followersNo: Int = 0,
+    val followedUsersNo: Int = 0,
+    val postsNo: Int = 0,
 
     @BsonId
     val id: String = ObjectId().toString(),
-) {
-    data class Bio(
-        val text: String? = null,
-        val profileImageUrl: String? = null
-    )
-
-    data class Contact(
-        val github: String? = null,
-        val linkedIn: String? = null,
-        val instagram: String? = null
-    )
-
-    data class Statistics(
-        val followersNo: Int = 0,
-        val followedUsersNo: Int = 0,
-        val postsNo: Int = 0,
-    )
-}
+)

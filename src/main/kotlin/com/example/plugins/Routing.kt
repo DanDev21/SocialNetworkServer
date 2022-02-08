@@ -1,44 +1,24 @@
 package com.example.plugins
 
-import com.example.controller.post.ActivityController
-import com.example.controller.post.PostController
-import com.example.controller.user.UserController
 import com.example.domain.data.dto.jwt.JwtProperties
 import com.example.domain.util.Property
 import com.example.routes.*
-import com.example.use_case.activity.GetActivities
-import com.example.use_case.comment.FindComments
-import com.example.use_case.follow.CreateFollow
-import com.example.use_case.follow.DeleteFollow
-import com.example.use_case.like.DeleteLikes
-import com.example.use_case.post.CreatePost
-import com.example.use_case.post.FindPosts
-import com.example.use_case.user.FindUsers
-import com.example.use_case.user.SignIn
-import com.example.use_case.user.SignUp
+import com.example.service.*
 import io.ktor.routing.*
 import io.ktor.application.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
-    val userController: UserController by inject()
-    val postController: PostController by inject()
-    val activityController: ActivityController by inject()
-
-    configureUserRoutes(userController)
-    configureFollowRoutes()
-    configurePostRoutes(postController)
-    configureCommentRoutes(postController, activityController)
-    configureLikeRoutes(activityController)
-    configureActivityRoutes()
+    registerUserRoutes()
+    registerFollowRoutes()
+    registerPostRoutes()
+    registerCommentRoutes()
+    registerLikeRoutes()
+    registerActivityRoutes()
 }
 
-private fun Application.configureUserRoutes(
-    userController: UserController
-) {
-    val signUpUseCase: SignUp by inject()
-    val signInUseCase: SignIn by inject()
-    val findUsersUseCase: FindUsers by inject()
+private fun Application.registerUserRoutes() {
+    val userService: UserService by inject()
     val jwtProperties = JwtProperties(
         issuer = environment.config.property(Property.DOMAIN).toString(),
         audience = environment.config.property(Property.AUDIENCE).toString(),
@@ -46,68 +26,70 @@ private fun Application.configureUserRoutes(
     )
 
     routing {
-        signUp(signUpUseCase)
+        signUp(userService)
         signIn(
-            signIn = signInUseCase,
-            jwtProperties = jwtProperties
+            userService,
+            jwtProperties
         )
-        findUsers(findUsersUseCase)
-        findProfile(userController)
+        findProfile(userService)
     }
 }
 
-private fun Application.configureFollowRoutes() {
-    val createFollow: CreateFollow by inject()
-    val deleteFollow: DeleteFollow by inject()
+private fun Application.registerFollowRoutes() {
+    val followService: FollowService by inject()
+    val activityService: ActivityService by inject()
 
     routing {
-        follow(createFollow)
-        unfollow(deleteFollow)
+        follow(
+            followService,
+            activityService
+        )
+        unfollow(followService)
     }
 }
 
-private fun Application.configurePostRoutes(
-    postController: PostController
-) {
-    val createPostUseCase: CreatePost by inject()
-    val findPostsUseCase: FindPosts by inject()
+private fun Application.registerPostRoutes() {
+    val postService: PostService by inject()
 
     routing {
-        createPost(createPostUseCase)
-        deletePost(postController)
-        getPosts(postController)
-        getPosts(findPostsUseCase)
+        createPost(postService)
+        deletePost(postService)
+        getUserPosts(postService)
+        getFollowedPosts(postService)
     }
 }
 
-private fun Application.configureCommentRoutes(
-    postController: PostController,
-    activityController: ActivityController
-) {
-    val findCommentsUseCase: FindComments by inject()
+private fun Application.registerCommentRoutes() {
+    val commentService: CommentService by inject()
+    val activityService: ActivityService by inject()
 
     routing {
-        createComment(activityController)
-        deleteComment(postController)
-        getComments(findCommentsUseCase)
+        createComment(
+            commentService,
+            activityService
+        )
+        deleteComment(commentService)
+        getComments(commentService)
     }
 }
 
-private fun Application.configureLikeRoutes(
-    activityController: ActivityController
-) {
-    val deleteLikes: DeleteLikes by inject()
+private fun Application.registerLikeRoutes() {
+    val likeService: LikeService by inject()
+    val activityService: ActivityService by inject()
 
     routing {
-        like(activityController)
-        unlike(deleteLikes)
+        like(
+            likeService,
+            activityService
+        )
+        unlike(likeService)
     }
 }
 
-private fun Application.configureActivityRoutes() {
-    val getActivitiesUseCase: GetActivities by inject()
+private fun Application.registerActivityRoutes() {
+    val activityService: ActivityService by inject()
 
     routing {
-        getActivities(getActivitiesUseCase)
+        getUserActivities(activityService)
     }
 }

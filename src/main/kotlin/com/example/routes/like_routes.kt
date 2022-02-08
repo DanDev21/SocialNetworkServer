@@ -1,25 +1,30 @@
 package com.example.routes
 
-import com.example.controller.post.ActivityController
 import com.example.domain.data.dto.request.like.LikeRequest
 import com.example.domain.data.dto.request.like.UnlikeRequest
-import com.example.domain.util.AppException
+import com.example.core.AppException
 import com.example.domain.util.Routes
 import com.example.domain.util.extensions.receive
 import com.example.domain.util.extensions.requesterId
-import com.example.use_case.like.DeleteLikes
+import com.example.service.ActivityService
+import com.example.service.LikeService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
 
 fun Route.like(
-    controller: ActivityController
+    likeService: LikeService,
+    activityService: ActivityService
 ) {
     authenticate {
         post(Routes.Like.CREATE) {
             try {
                 val request = call.receive<LikeRequest>()
-                controller.like(request, call.requesterId)
+                val result = likeService.add(request, call.requesterId)
+
+                if (result.succeeded) {
+                    activityService.add(request, call.requesterId)
+                }
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response
@@ -31,13 +36,13 @@ fun Route.like(
 }
 
 fun Route.unlike(
-    deleteLikes: DeleteLikes
+    likeService: LikeService
 ) {
     authenticate {
         delete(Routes.Like.DELETE) {
             try {
                 val request = call.receive<UnlikeRequest>()
-                deleteLikes(request, call.requesterId)
+                val result = likeService.delete(request, call.requesterId)
                 // TODO: send response
             } catch (e: AppException) {
                 // TODO: send response

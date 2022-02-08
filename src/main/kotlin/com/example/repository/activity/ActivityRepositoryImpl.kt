@@ -32,9 +32,9 @@ class ActivityRepositoryImpl(
     override suspend fun getAll(
         pageNumber: Int,
         pageSize: Int,
-        userId: String,
+        targetedUserId: String,
     ) = FindManyResult(
-        items = activities.find(Activity::targetUserId eq userId)
+        items = activities.find(Activity::targetUserId eq targetedUserId)
             .skip(pageNumber * pageSize)
             .limit(pageSize)
             .descendingSort(Activity::timestamp)

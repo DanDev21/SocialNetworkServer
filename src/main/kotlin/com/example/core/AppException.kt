@@ -1,4 +1,4 @@
-package com.example.domain.util
+package com.example.core
 
 sealed class AppException(
     override val message: String

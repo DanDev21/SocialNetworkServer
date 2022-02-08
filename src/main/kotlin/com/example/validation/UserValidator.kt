@@ -1,7 +1,7 @@
 package com.example.validation
 
 import com.example.domain.model.User
-import com.example.domain.util.AppException.InvalidException
+import com.example.core.AppException.InvalidException
 import com.example.domain.util.Length
 import com.example.domain.util.Validation
 

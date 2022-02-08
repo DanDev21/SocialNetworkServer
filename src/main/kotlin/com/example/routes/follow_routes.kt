@@ -2,24 +2,30 @@ package com.example.routes
 
 import com.example.domain.data.dto.request.follow.FollowRequest
 import com.example.domain.data.dto.request.follow.UnfollowRequest
-import com.example.domain.util.AppException
+import com.example.core.AppException
 import com.example.domain.util.Routes
 import com.example.domain.util.extensions.receive
 import com.example.domain.util.extensions.requesterId
-import com.example.use_case.follow.CreateFollow
-import com.example.use_case.follow.DeleteFollow
+import com.example.service.ActivityService
+import com.example.service.FollowService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
 
 fun Route.follow(
-    createFollow: CreateFollow
+    followService: FollowService,
+    activityService: ActivityService,
 ) {
     authenticate {
         post(Routes.Follow.FOLLOW_USER) {
             try {
                 val request = call.receive<FollowRequest>()
-                createFollow(request, call.requesterId)
+                val result = followService.add(request, call.requesterId)
+
+                if (result.succeeded) {
+                    activityService.add(request, call.requesterId)
+                }
+                TODO()
             } catch (e: AppException) {
                 TODO()
             } catch (e: Exception) {
@@ -29,12 +35,13 @@ fun Route.follow(
     }
 }
 
-fun Route.unfollow(deleteFollow: DeleteFollow) {
+fun Route.unfollow(service: FollowService) {
     authenticate {
         delete(Routes.Follow.UNFOLLOW) {
             try {
                 val request = call.receive<UnfollowRequest>()
-                deleteFollow(request, call.requesterId)
+                val result = service.delete(request, call.requesterId)
+                TODO()
             } catch (e: AppException) {
                 TODO()
             } catch (e: Exception) {

@@ -4,7 +4,7 @@ import com.example.domain.data.dto.crud.CrudResult.FindResult
 import com.example.domain.model.Comment
 import com.example.domain.model.Post
 import com.example.domain.model.User
-import com.example.domain.util.AppException.InvalidException
+import com.example.core.AppException.InvalidException
 import com.example.domain.util.Length
 import com.example.domain.util.Validation
 
@@ -15,7 +15,7 @@ class CommentValidator(
 
     override suspend fun validate(entity: Comment) {
         findUser(entity.authorId).obj?.also {
-            if (it.bio.profileImageUrl != entity.author.userProfileImageUrl ||
+            if (it.profileImageUrl != entity.author.userProfileImageUrl ||
                 it.username != entity.author.username) {
                 throw InvalidException(Validation.FIELD)
             }
