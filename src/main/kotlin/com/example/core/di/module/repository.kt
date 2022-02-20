@@ -1,17 +1,17 @@
 package com.example.core.di.module
 
-import com.example.repository.activity.ActivityRepository
-import com.example.repository.activity.ActivityRepositoryImpl
-import com.example.repository.comment.CommentRepository
-import com.example.repository.comment.CommentRepositoryImpl
-import com.example.repository.follow.FollowRepository
-import com.example.repository.follow.FollowRepositoryImpl
-import com.example.repository.like.LikeRepository
-import com.example.repository.like.LikeRepositoryImpl
-import com.example.repository.post.PostRepository
-import com.example.repository.post.PostRepositoryImpl
-import com.example.repository.user.UserRepository
-import com.example.repository.user.UserRepositoryImpl
+import com.example.data.repository.activity.ActivityRepository
+import com.example.data.repository.activity.ActivityRepositoryImpl
+import com.example.data.repository.comment.CommentRepository
+import com.example.data.repository.comment.CommentRepositoryImpl
+import com.example.data.repository.follow.FollowRepository
+import com.example.data.repository.follow.FollowRepositoryImpl
+import com.example.data.repository.like.LikeRepository
+import com.example.data.repository.like.LikeRepositoryImpl
+import com.example.data.repository.post.PostRepository
+import com.example.data.repository.post.PostRepositoryImpl
+import com.example.data.repository.user.UserRepository
+import com.example.data.repository.user.UserRepositoryImpl
 import org.koin.dsl.module
 
 val repository = module {

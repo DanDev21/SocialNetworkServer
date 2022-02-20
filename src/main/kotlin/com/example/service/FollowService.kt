@@ -1,12 +1,12 @@
 package com.example.service
 
-import com.example.domain.data.dto.crud.CrudResult.*
-import com.example.domain.data.dto.request.follow.FollowRequest
-import com.example.domain.data.dto.request.follow.UnfollowRequest
-import com.example.domain.model.Follow
-import com.example.repository.follow.FollowRepository
-import com.example.repository.user.UserRepository
-import com.example.validation.FollowValidator
+import com.example.data.dto.util.CrudResult.*
+import com.example.data.dto.request.follow.FollowRequest
+import com.example.data.dto.request.follow.UnfollowRequest
+import com.example.data.entity.Follow
+import com.example.data.repository.follow.FollowRepository
+import com.example.data.repository.user.UserRepository
+import com.example.data.validation.FollowValidator
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

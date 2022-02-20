@@ -1,20 +1,31 @@
 package com.example.plugins
 
-import com.example.domain.data.dto.jwt.JwtProperties
-import com.example.domain.util.Property
+import com.example.core.util.Property
+import com.example.data.dto.util.JwtProperties
+import com.example.routes.activity.getUserActivities
 import com.example.routes.*
 import com.example.service.*
-import io.ktor.routing.*
 import io.ktor.application.*
+import io.ktor.http.content.*
+import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
+    registerStaticResources()
     registerUserRoutes()
     registerFollowRoutes()
     registerPostRoutes()
     registerCommentRoutes()
     registerLikeRoutes()
     registerActivityRoutes()
+}
+
+private fun Application.registerStaticResources() {
+    routing {
+        static {
+            resources("static")
+        }
+    }
 }
 
 private fun Application.registerUserRoutes() {
@@ -31,7 +42,11 @@ private fun Application.registerUserRoutes() {
             userService,
             jwtProperties
         )
-        findProfile(userService)
+
+        getProfile(userService)
+
+        updateProfile(userService)
+        updateProfileImage(userService)
     }
 }
 

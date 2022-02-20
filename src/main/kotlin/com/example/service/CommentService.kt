@@ -1,15 +1,15 @@
 package com.example.service
 
-import com.example.domain.data.dto.crud.CrudResult.InsertResult
-import com.example.domain.data.dto.request.comment.CommentRequest
-import com.example.domain.data.dto.request.comment.DeleteCommentRequest
-import com.example.domain.model.Comment
-import com.example.domain.model.SimpleUser
-import com.example.repository.comment.CommentRepository
-import com.example.repository.like.LikeRepository
-import com.example.repository.post.PostRepository
-import com.example.repository.user.UserRepository
-import com.example.validation.CommentValidator
+import com.example.data.dto.util.CrudResult.InsertResult
+import com.example.data.dto.request.comment.CommentRequest
+import com.example.data.dto.request.comment.DeleteCommentRequest
+import com.example.data.entity.Comment
+import com.example.data.entity.SimpleUser
+import com.example.data.repository.comment.CommentRepository
+import com.example.data.repository.like.LikeRepository
+import com.example.data.repository.post.PostRepository
+import com.example.data.repository.user.UserRepository
+import com.example.data.validation.CommentValidator
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

@@ -1,6 +1,6 @@
 package com.example.core.di.module
 
-import com.example.domain.util.Database
+import com.example.core.util.Database
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo

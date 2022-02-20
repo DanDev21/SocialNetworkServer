@@ -1,19 +1,19 @@
 package com.example.service
 
-import com.example.domain.data.dto.crud.CrudResult.InsertResult
-import com.example.domain.data.dto.request.comment.CommentRequest
-import com.example.domain.data.dto.request.follow.FollowRequest
-import com.example.domain.data.dto.request.like.LikeRequest
-import com.example.domain.model.Activity
-import com.example.domain.util.Action
-import com.example.domain.util.Target
-import com.example.domain.util.Validation
-import com.example.repository.activity.ActivityRepository
-import com.example.repository.comment.CommentRepository
-import com.example.repository.like.LikeRepository
-import com.example.repository.post.PostRepository
-import com.example.repository.user.UserRepository
-import com.example.validation.ActivityValidator
+import com.example.data.dto.util.CrudResult.InsertResult
+import com.example.data.dto.request.comment.CommentRequest
+import com.example.data.dto.request.follow.FollowRequest
+import com.example.data.dto.request.like.LikeRequest
+import com.example.data.entity.Activity
+import com.example.core.util.Action
+import com.example.core.util.Target
+import com.example.data.util.Validation
+import com.example.data.repository.activity.ActivityRepository
+import com.example.data.repository.comment.CommentRepository
+import com.example.data.repository.like.LikeRepository
+import com.example.data.repository.post.PostRepository
+import com.example.data.repository.user.UserRepository
+import com.example.data.validation.ActivityValidator
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
