@@ -1,38 +1,45 @@
 package com.example.data.validation
 
 import com.example.data.dto.util.CrudResult.FindResult
-import com.example.data.entity.*
-import com.example.core.util.Action
-import com.example.core.AppException.InvalidException
-import com.example.core.Validation
+import com.example.Action
+import com.example.util.AppException.InvalidException
+import com.example.util.AppException.InvalidException.Validation
+import com.example.domain.entity.Activity
+import com.example.domain.entity.Post
+import com.example.domain.entity.User
 
 class ActivityValidator(
     private val findUser: suspend (String) -> FindResult<User>,
-    private val findLike: suspend (String) -> FindResult<Like>,
-    private val findComment: suspend (String) -> FindResult<Comment>,
+    private val findPost: suspend (String) -> FindResult<Post>,
 ) : Validator<Activity> {
 
     override suspend fun validate(entity: Activity) {
-        if (findUser(entity.authorId).failed ||
-            findUser(entity.targetUserId).failed) {
+        if (
+            entity.authorId == entity.targetedUserId ||
+            findUser(entity.authorId).failed ||
+            findUser(entity.targetedUserId).failed
+        ) {
             throw InvalidException(Validation.USER_ID)
         }
 
         when (entity.actionInt) {
             Action.LIKED -> {
-                if (findLike(entity.targetId).failed) {
+                if (entity.targetedPostId == null || findPost(entity.targetedPostId).failed) {
                     throw InvalidException(Validation.TARGET_ID)
                 }
             }
 
             Action.COMMENTED -> {
-                if (findComment(entity.targetId).failed) {
+                if (entity.targetedPostId == null ||
+                    findPost(entity.targetedPostId).content.authorId != entity.targetedUserId) {
                     throw InvalidException(Validation.TARGET_ID)
                 }
             }
 
             Action.STARTED_FOLLOWING -> {
-                // the user's ids are already validated
+                if (entity.targetedPostId != null) {
+                    throw InvalidException(Validation.TARGET_ID)
+                }
             }
 
             else -> throw InvalidException(Validation.ACTION_INT)

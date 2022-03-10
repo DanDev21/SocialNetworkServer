@@ -1,14 +1,13 @@
 package com.example.routes.user
 
-import com.example.core.AppException
-import com.example.data.dto.request.user.UpdateProfileRequest
-import com.example.core.util.FileManager
-import com.example.core.util.Folder
-import com.example.core.util.Routes
-import com.example.core.util.extensions.getPicture
-import com.example.core.util.extensions.receive
-import com.example.core.util.extensions.requesterId
-import com.example.service.UserService
+import com.example.Routes
+import com.example.extensions.confirm
+import com.example.extensions.receive
+import com.example.extensions.requesterId
+import com.example.extensions.safe
+import com.example.util.FileInterceptor
+import com.example.data.dto.request.user.UpdateUserRequest
+import com.example.domain.service.UserService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
@@ -17,15 +16,13 @@ fun Route.updateProfile(
     service: UserService
 ) {
     authenticate {
-        put(Routes.User.UPDATE_PROFILE) {
-            try {
-                val request = call.receive<UpdateProfileRequest>()
-                val result = service.update(request, call.requesterId)
-                TODO()
-            } catch (e: AppException) {
-                TODO()
-            } catch (e: Exception) {
-                TODO()
+        put(Routes.User.UPDATE) {
+            safe {
+                val request = call.receive<UpdateUserRequest>()
+                val result = service
+                    .update(request, call.requesterId)
+
+                call.confirm(result)
             }
         }
     }
@@ -36,24 +33,16 @@ fun Route.updateProfileImage(
 ) {
     authenticate {
         put(Routes.User.UPDATE_PROFILE_PICTURE) {
-            try {
-                val picture = call.getPicture()
+            safe {
+                val imageData = FileInterceptor.from(call)
+                    .extractImageFileData()
+
                 val result = service.update(
-                    profileImageUrl = picture.url,
+                    imageData = imageData,
                     userId = call.requesterId
                 )
 
-                if (result.succeeded) {
-                    FileManager.save(
-                        picture = picture,
-                        folderPath = Folder.PROFILE_PICTURE
-                    )
-                }
-                TODO()
-            } catch (e: AppException) {
-                TODO()
-            } catch (e: Exception) {
-                TODO()
+                call.confirm(result)
             }
         }
     }

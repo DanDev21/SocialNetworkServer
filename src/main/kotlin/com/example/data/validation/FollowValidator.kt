@@ -1,10 +1,10 @@
 package com.example.data.validation
 
+import com.example.util.AppException.InvalidException
+import com.example.util.AppException.InvalidException.Validation
 import com.example.data.dto.util.CrudResult.FindResult
-import com.example.data.entity.Follow
-import com.example.data.entity.User
-import com.example.core.AppException.InvalidException
-import com.example.data.util.Validation
+import com.example.domain.entity.Follow
+import com.example.domain.entity.User
 
 class FollowValidator(
     private val findUser: suspend (String) -> FindResult<User>

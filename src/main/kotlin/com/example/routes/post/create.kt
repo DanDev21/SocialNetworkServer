@@ -1,29 +1,27 @@
 package com.example.routes.post
 
-import com.example.core.AppException
-import com.example.core.util.Routes
-import com.example.core.util.extensions.receive
-import com.example.core.util.extensions.requesterId
+import com.example.Routes
+import com.example.util.FileInterceptor
+import com.example.extensions.requesterId
+import com.example.extensions.confirm
+import com.example.extensions.safe
 import com.example.data.dto.request.post.CreatePostRequest
-import com.example.service.PostService
+import com.example.domain.service.PostService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
 
 fun Route.createPost(
-    service: PostService
+    service: PostService,
 ) {
     authenticate {
         post(Routes.Post.CREATE_POST) {
-            try {
-                val request = call.receive<CreatePostRequest>()
-                val result = service.add(request, call.requesterId)
-                TODO()
-            } catch (e: AppException) {
-                TODO()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                TODO()
+            safe {
+                val tuple = FileInterceptor.from(call)
+                    .extractRequestAndImageFileData<CreatePostRequest>()
+                val result = service.add(tuple, call.requesterId)
+
+                call.confirm(result)
             }
         }
     }

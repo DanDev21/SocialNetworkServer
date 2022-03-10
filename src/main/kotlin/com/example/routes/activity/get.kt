@@ -1,14 +1,16 @@
 package com.example.routes.activity
 
-import com.example.core.AppException
-import com.example.core.util.Length
-import com.example.core.util.Routes
-import com.example.core.util.extensions.pageNumber
-import com.example.core.util.extensions.pageSize
-import com.example.core.util.extensions.requesterId
-import com.example.service.ActivityService
+import com.example.Routes
+import com.example.extensions.receive
+import com.example.extensions.requesterId
+import com.example.data.dto.request.PaginatedResourceRequest
+import com.example.data.dto.response.ListResponse
+import com.example.domain.service.ActivityService
+import com.example.extensions.safe
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.http.*
+import io.ktor.response.*
 import io.ktor.routing.*
 
 fun Route.getUserActivities(
@@ -16,17 +18,14 @@ fun Route.getUserActivities(
 ) {
     authenticate {
         get(Routes.Activity.GET_USER_ACTIVITIES) {
-            try {
+            safe {
+                val request = call.receive<PaginatedResourceRequest>()
                 val result = service.getUserActivities(
-                    pageNumber = call.pageNumber,
-                    pageSize = call.pageSize ?: Length.ACTIVITY_PAGE,
+                    request = request,
                     targetedUserId = call.requesterId
                 )
-                TODO()
-            } catch (e: AppException) {
-                TODO()
-            } catch (e: Exception) {
-                TODO()
+
+                call.respond(HttpStatusCode.OK, ListResponse(result))
             }
         }
     }

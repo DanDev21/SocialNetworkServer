@@ -1,10 +1,7 @@
 package com.example
 
-import com.example.core.di.module.main
-import com.example.core.di.module.service
-import com.example.core.di.module.repository
-import io.ktor.application.*
 import com.example.plugins.*
+import io.ktor.application.*
 import org.koin.ktor.ext.Koin
 
 fun main(args: Array<String>): Unit =

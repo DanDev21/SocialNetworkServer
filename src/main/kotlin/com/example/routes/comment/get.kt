@@ -1,11 +1,14 @@
 package com.example.routes.comment
 
-import com.example.core.AppException
-import com.example.core.util.Routes
-import com.example.core.util.extensions.postId
-import com.example.service.CommentService
+import com.example.Routes
+import com.example.extensions.objectId
+import com.example.extensions.safe
+import com.example.data.dto.response.ListResponse
+import com.example.domain.service.CommentService
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.http.*
+import io.ktor.response.*
 import io.ktor.routing.*
 
 fun Route.getComments(
@@ -13,13 +16,11 @@ fun Route.getComments(
 ) {
     authenticate {
         get(Routes.Comment.GET_POST_COMMENTS) {
-            try {
-                val comments = commentService.getPostComments(call.postId)
-                // TODO: send response
-            } catch (e: AppException) {
-                // TODO: send response
-            } catch (e: Exception) {
-                // TODO: send response
+            safe {
+                val comments = commentService
+                    .getPostComments(call.objectId)
+
+                call.respond(HttpStatusCode.OK, ListResponse(comments))
             }
         }
     }

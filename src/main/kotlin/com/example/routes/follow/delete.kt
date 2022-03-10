@@ -1,11 +1,11 @@
 package com.example.routes.follow
 
-import com.example.core.AppException
-import com.example.core.util.Routes
-import com.example.core.util.extensions.receive
-import com.example.core.util.extensions.requesterId
-import com.example.data.dto.request.follow.UnfollowRequest
-import com.example.service.FollowService
+import com.example.Routes
+import com.example.extensions.confirm
+import com.example.extensions.requesterId
+import com.example.extensions.safe
+import com.example.extensions.objectId
+import com.example.domain.service.FollowService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
@@ -15,14 +15,14 @@ fun Route.unfollow(
 ) {
     authenticate {
         delete(Routes.Follow.UNFOLLOW) {
-            try {
-                val request = call.receive<UnfollowRequest>()
-                val result = service.delete(request, call.requesterId)
-                TODO()
-            } catch (e: AppException) {
-                TODO()
-            } catch (e: Exception) {
-                TODO()
+            safe {
+                val result = service
+                    .delete(
+                        followedUserId = call.objectId,
+                        followerId = call.requesterId
+                    )
+
+                call.confirm(result)
             }
         }
     }

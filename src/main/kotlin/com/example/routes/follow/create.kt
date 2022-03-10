@@ -1,12 +1,12 @@
 package com.example.routes.follow
 
-import com.example.core.AppException
-import com.example.core.util.Routes
-import com.example.core.util.extensions.receive
-import com.example.core.util.extensions.requesterId
-import com.example.data.dto.request.follow.FollowRequest
-import com.example.service.ActivityService
-import com.example.service.FollowService
+import com.example.Routes
+import com.example.extensions.confirm
+import com.example.extensions.objectId
+import com.example.extensions.requesterId
+import com.example.extensions.safe
+import com.example.domain.service.ActivityService
+import com.example.domain.service.FollowService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
@@ -17,18 +17,17 @@ fun Route.follow(
 ) {
     authenticate {
         post(Routes.Follow.FOLLOW_USER) {
-            try {
-                val request = call.receive<FollowRequest>()
-                val result = followService.add(request, call.requesterId)
+            safe {
+                val result = followService
+                    .add(call.objectId, call.requesterId)
 
                 if (result.succeeded) {
-                    activityService.add(request, call.requesterId)
+                    activityService.add(
+                        followedUserId = call.objectId,
+                        followerId = call.requesterId
+                    )
                 }
-                TODO()
-            } catch (e: AppException) {
-                TODO()
-            } catch (e: Exception) {
-                TODO()
+                call.confirm(result)
             }
         }
     }

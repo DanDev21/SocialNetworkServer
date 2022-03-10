@@ -1,11 +1,11 @@
 package com.example.routes.comment
 
-import com.example.core.AppException
-import com.example.core.util.Routes
-import com.example.core.util.extensions.receive
-import com.example.core.util.extensions.requesterId
-import com.example.data.dto.request.comment.DeleteCommentRequest
-import com.example.service.CommentService
+import com.example.Routes
+import com.example.extensions.confirm
+import com.example.extensions.objectId
+import com.example.extensions.requesterId
+import com.example.extensions.safe
+import com.example.domain.service.CommentService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
@@ -15,14 +15,11 @@ fun Route.deleteComment(
 ) {
     authenticate {
         delete(Routes.Comment.DELETE) {
-            try {
-                val request = call.receive<DeleteCommentRequest>()
-                val result = commentService.delete(request, call.requesterId)
-                // TODO: send response
-            } catch (e: AppException) {
-                // TODO: send response
-            } catch (e: Exception) {
-                // TODO: send response
+            safe {
+                val result = commentService
+                    .delete(call.objectId, call.requesterId)
+
+                call.confirm(result)
             }
         }
     }

@@ -1,22 +1,25 @@
 package com.example.data.dto.util
 
-sealed class CrudResult<T> {
+import com.example.util.AppException.InvalidException
+import com.example.util.AppException.InvalidException.Validation
 
-    data class InsertResult<T>(val succeeded: Boolean, val obj: T) : CrudResult<T>()
+sealed class CrudResult <T> (open val data: T?) {
 
-    data class UpdateResult<T>(val succeeded: Boolean) : CrudResult<T>()
+    val succeeded: Boolean get() = data != null
+    val failed: Boolean get() = data == null
 
-    data class FindManyResult<T>(val items: List<T>) : CrudResult<T>()
+    val content: T get() = data
+        ?: throw InvalidException(Validation.TRYING_FORCE_NULL)
 
-    data class FindResult<T>(val obj: T?) : CrudResult<T>() {
+    data class InsertResult <T> (override val data: T?)
+        : CrudResult <T> (data)
 
-        val founded: Boolean    get() = obj != null
-        val failed: Boolean     get() = !founded
-        val item: T get() = obj ?: throw NullPointerException()
-    }
+    data class UpdateResult <T> (override val data: T?)
+        : CrudResult <T> (data)
 
-    data class DeleteResult<T>(val deleteCount: Long) : CrudResult<T>() {
+    data class FindResult <T> (override val data: T?)
+        : CrudResult <T> (data)
 
-        fun wasAcknowledged() = deleteCount > 0L
-    }
+    data class DeleteResult <T> (override val data: T?)
+        : CrudResult <T> (data)
 }
