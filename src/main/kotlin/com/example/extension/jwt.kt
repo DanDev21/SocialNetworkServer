@@ -1,11 +1,11 @@
-package com.example.extensions
+package com.example.extension
 
 import com.auth0.jwt.JWTCreator
 import com.auth0.jwt.algorithms.Algorithm
 import com.example.data.dto.util.JwtProperties
 import com.example.domain.entity.User
-import com.example.Time
-import com.example.Token
+import com.example.util.Time
+import com.example.util.Token
 import java.util.*
 
 

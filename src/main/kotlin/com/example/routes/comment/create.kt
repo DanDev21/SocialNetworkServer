@@ -1,10 +1,10 @@
 package com.example.routes.comment
 
-import com.example.Routes
-import com.example.extensions.confirm
-import com.example.extensions.receive
-import com.example.extensions.requesterId
-import com.example.extensions.safe
+import com.example.util.Routes
+import com.example.extension.confirm
+import com.example.extension.receive
+import com.example.extension.requesterId
+import com.example.extension.safe
 import com.example.data.dto.request.comment.CommentRequest
 import com.example.domain.service.ActivityService
 import com.example.domain.service.CommentService

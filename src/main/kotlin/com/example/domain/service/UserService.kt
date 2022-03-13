@@ -2,10 +2,10 @@ package com.example.domain.service
 
 import com.example.util.AppException.InvalidException
 import com.example.util.AppException.InvalidException.Validation
-import com.example.Folder
-import com.example.Url
+import com.example.util.Folder
+import com.example.util.Url
 import com.example.util.FileManager
-import com.example.data.dto.request.user.SigninRequest
+import com.example.data.dto.request.user.SignInRequest
 import com.example.data.dto.request.user.SignupRequest
 import com.example.data.dto.request.user.UpdateUserRequest
 import com.example.data.dto.util.CrudResult.*
@@ -35,7 +35,7 @@ class UserService(
     }
 
     suspend fun signIn(
-        request: SigninRequest,
+        request: SignInRequest,
     ) = userRepository
         .findByEmailOrUsername(request.emailOrUsername.trim())
         .takeIf { it.data?.password == request.password.trim() }

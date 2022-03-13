@@ -1,8 +1,7 @@
 package com.example.domain.service
 
-import com.example.Action
-import com.example.Target
-import com.example.data.dto.request.PaginatedResourceRequest
+import com.example.util.Action
+import com.example.util.Target
 import com.example.data.dto.request.comment.CommentRequest
 import com.example.data.dto.request.like.LikeRequest
 import com.example.data.dto.util.CrudResult.InsertResult
@@ -104,11 +103,12 @@ class ActivityService(
     }
 
     suspend fun getUserActivities(
-        request: PaginatedResourceRequest,
+        pageNumber: Int,
+        pageSize: Int,
         targetedUserId: String
     ) = activityRepository.getAll(
-        pageNumber = request.pageNumber,
-        pageSize = request.pageSize,
+        pageNumber = pageNumber,
+        pageSize = pageSize,
         targetedUserId = targetedUserId
     )
 }

@@ -1,6 +1,6 @@
 package com.example.plugins
 
-import com.example.Database
+import com.example.util.Database
 import com.example.domain.repository.*
 import com.example.domain.service.*
 import com.google.gson.Gson

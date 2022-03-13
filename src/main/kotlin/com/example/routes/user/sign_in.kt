@@ -1,13 +1,13 @@
 package com.example.routes.user
 
 import com.auth0.jwt.JWT
-import com.example.Routes
-import com.example.extensions.intendedFor
-import com.example.extensions.receive
-import com.example.extensions.safe
-import com.example.extensions.signUsing
-import com.example.data.dto.request.user.SigninRequest
-import com.example.data.dto.response.SingletonResponse
+import com.example.util.Routes
+import com.example.data.dto.util.DataWrapper
+import com.example.extension.intendedFor
+import com.example.extension.receive
+import com.example.extension.safe
+import com.example.extension.signUsing
+import com.example.data.dto.request.user.SignInRequest
 import com.example.data.dto.util.JwtProperties
 import com.example.domain.service.UserService
 import io.ktor.application.*
@@ -21,14 +21,14 @@ fun Route.signIn(
 ) {
     post(Routes.User.SIGN_IN) {
         safe {
-            val request = call.receive<SigninRequest>()
+            val request = call.receive<SignInRequest>()
             val result = service.signIn(request)
 
             val token = JWT.create()
                 .intendedFor(result.content)
                 .signUsing(jwtProperties)
 
-            call.respond(HttpStatusCode.OK, SingletonResponse(obj = token))
+            call.respond(HttpStatusCode.OK, DataWrapper(token))
         }
     }
 }

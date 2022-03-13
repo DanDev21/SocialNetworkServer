@@ -1,9 +1,9 @@
 package com.example.routes.user
 
-import com.example.Routes
-import com.example.extensions.confirm
-import com.example.extensions.receive
-import com.example.extensions.safe
+import com.example.util.Routes
+import com.example.extension.confirm
+import com.example.extension.receive
+import com.example.extension.safe
 import com.example.data.dto.request.user.SignupRequest
 import com.example.domain.service.UserService
 import io.ktor.application.*

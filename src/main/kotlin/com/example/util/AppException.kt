@@ -1,7 +1,5 @@
 package com.example.util
 
-import com.example.Length
-
 sealed class AppException(
     override val message: String
 ) : Exception(message) {

@@ -1,12 +1,9 @@
 package com.example.routes.post
 
-import com.example.Routes
-import com.example.extensions.receive
-import com.example.extensions.requesterId
-import com.example.extensions.safe
-import com.example.data.dto.request.PaginatedResourceRequest
-import com.example.data.dto.response.ListResponse
+import com.example.util.Routes
+import com.example.data.dto.util.DataWrapper
 import com.example.domain.service.PostService
+import com.example.extension.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -19,10 +16,13 @@ fun Route.getUserPosts(
     authenticate {
         get(Routes.Post.GET_USER_POSTS) {
             safe {
-                val request = call.receive<PaginatedResourceRequest>()
-                val result = service.getUserPosts(request, call.requesterId)
+                val result = service.getUserPosts(
+                    pageNumber = call.pageNumber,
+                    pageSize = call.pageSize,
+                    authorId = call.requesterId
+                )
 
-                call.respond(HttpStatusCode.OK, ListResponse(result))
+                call.respond(HttpStatusCode.OK, DataWrapper(result.content))
             }
         }
     }
@@ -34,10 +34,13 @@ fun Route.getFollowedPosts(
     authenticate {
         get(Routes.Post.GET_FOLLOWED_USERS_POSTS) {
             safe {
-                val request = call.receive<PaginatedResourceRequest>()
-                val result = service.getFollowedPosts(request, call.requesterId)
+                val result = service.getFollowedPosts(
+                    pageNumber = call.pageNumber,
+                    pageSize = call.pageSize,
+                    followerId = call.requesterId
+                )
 
-                call.respond(HttpStatusCode.OK, ListResponse(result))
+                call.respond(HttpStatusCode.OK, DataWrapper(result.content))
             }
         }
     }

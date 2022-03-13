@@ -1,4 +1,4 @@
-package com.example
+package com.example.util
 
 object Time {
     const val ONE_YEAR = 1000L * 60L * 60L * 24L * 365L
@@ -6,7 +6,7 @@ object Time {
 
 object Length {
 
-    const val PAGINATED_RESOURCE_PAGE = 20
+    const val RESOURCE_PAGE_SIZE = 20
 
     object Min {
         const val USERNAME = 3
@@ -65,6 +65,8 @@ object RouteParams {
 
 object QueryParams {
     const val RAW_DATA = "rawData"
+    const val PAGE_NUMBER = "pageNumber"
+    const val PAGE_SIZE = "pageSize"
 }
 
 object Routes {

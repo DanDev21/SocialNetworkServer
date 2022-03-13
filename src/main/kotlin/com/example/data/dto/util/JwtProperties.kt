@@ -1,6 +1,6 @@
 package com.example.data.dto.util
 
-import com.example.JwtProperty
+import com.example.util.JwtProperty
 import io.ktor.config.*
 
 data class JwtProperties(

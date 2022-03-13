@@ -1,11 +1,11 @@
 package com.example.routes.post
 
-import com.example.Routes
+import com.example.util.Routes
+import com.example.data.dto.util.DataWrapper
 import com.example.util.FileInterceptor
-import com.example.extensions.requesterId
-import com.example.extensions.confirm
-import com.example.extensions.safe
-import com.example.data.dto.request.post.CreatePostRequest
+import com.example.extension.requesterId
+import com.example.extension.confirm
+import com.example.extension.safe
 import com.example.domain.service.PostService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -18,7 +18,7 @@ fun Route.createPost(
         post(Routes.Post.CREATE_POST) {
             safe {
                 val tuple = FileInterceptor.from(call)
-                    .extractRequestAndImageFileData<CreatePostRequest>()
+                    .extractDataAndFile<DataWrapper<String>>()
                 val result = service.add(tuple, call.requesterId)
 
                 call.confirm(result)

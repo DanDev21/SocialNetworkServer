@@ -1,10 +1,10 @@
 package com.example.routes.user
 
-import com.example.Routes
-import com.example.extensions.requesterId
-import com.example.extensions.safe
-import com.example.extensions.objectId
-import com.example.data.dto.response.SingletonResponse
+import com.example.util.Routes
+import com.example.data.dto.util.DataWrapper
+import com.example.extension.requesterId
+import com.example.extension.safe
+import com.example.extension.objectId
 import com.example.domain.service.UserService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -23,7 +23,7 @@ fun Route.getProfile(
                     requesterId = call.requesterId
                 )
 
-                call.respond(HttpStatusCode.OK, SingletonResponse(profile))
+                call.respond(HttpStatusCode.OK, DataWrapper(profile))
             }
         }
     }

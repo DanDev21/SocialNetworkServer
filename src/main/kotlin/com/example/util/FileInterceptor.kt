@@ -1,9 +1,7 @@
 package com.example.util
 
-import com.example.Length
-import com.example.QueryParams
 import com.example.util.FileManager.RawFileData
-import com.example.extensions.getRawFileData
+import com.example.extension.getRawFileData
 import com.example.data.dto.util.Tuple
 import com.example.util.AppException.InvalidException
 import com.example.util.AppException.InvalidException.Validation
@@ -20,7 +18,7 @@ class FileInterceptor private constructor(val parts: List<PartData>) {
             FileInterceptor(call.receiveMultipart().readAllParts())
     }
 
-    inline fun <reified T> extractRequestAndImageFileData() =
+    inline fun <reified T> extractDataAndFile() =
         Tuple(extract<T>(), extractImageFileData())
 
     inline fun <reified T> extract(): T = parts

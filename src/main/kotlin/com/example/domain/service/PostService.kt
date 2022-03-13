@@ -1,10 +1,9 @@
 package com.example.domain.service
 
-import com.example.Folder
-import com.example.Url
+import com.example.util.Folder
+import com.example.util.Url
+import com.example.data.dto.util.DataWrapper
 import com.example.util.FileManager
-import com.example.data.dto.request.PaginatedResourceRequest
-import com.example.data.dto.request.post.CreatePostRequest
 import com.example.data.dto.util.CrudResult
 import com.example.data.dto.util.CrudResult.InsertResult
 import com.example.data.dto.util.Tuple
@@ -27,12 +26,12 @@ class PostService(
         FileManager.getNewManagerFor(Folder.POST_IMAGES, Url.POST_IMAGES)
 
     suspend fun add(
-        tuple: Tuple<CreatePostRequest, FileManager.RawFileData>,
+        tuple: Tuple<DataWrapper<String>, FileManager.RawFileData>,
         authorId: String,
     ): InsertResult<Post> {
         val post = Post(
             authorId = authorId,
-            description = tuple.first.description,
+            description = tuple.first.data,
             imageUrl = Url.POST_IMAGES + tuple.second.fileName,
             timestamp = System.currentTimeMillis()
         )
@@ -50,25 +49,27 @@ class PostService(
         postRepository.findById(id)
 
     suspend fun getFollowedPosts(
-        request: PaginatedResourceRequest,
+        pageNumber: Int,
+        pageSize: Int,
         followerId: String,
     ): CrudResult.FindResult<List<Post>> {
         val followedUsersIds = followRepository.findByFollowerId(followerId)
                 .content.map { it.followedUserId }
 
         return postRepository.getAll(
-            pageNumber = request.pageNumber,
-            pageSize = request.pageSize,
+            pageNumber = pageNumber,
+            pageSize = pageSize,
             followedUsersIds = followedUsersIds
         )
     }
 
     suspend fun getUserPosts(
-        request: PaginatedResourceRequest,
+        pageNumber: Int,
+        pageSize: Int,
         authorId: String,
     ) = postRepository.getAll(
-        pageNumber = request.pageNumber,
-        pageSize = request.pageSize,
+        pageNumber = pageNumber,
+        pageSize = pageSize,
         authorId = authorId
     )
 

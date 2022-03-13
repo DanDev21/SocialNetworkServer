@@ -1,4 +1,4 @@
-package com.example.extensions
+package com.example.extension
 
 import com.example.util.AppException
 import com.example.util.AppException.InvalidException.Validation

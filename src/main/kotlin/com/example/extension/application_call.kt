@@ -1,7 +1,9 @@
-package com.example.extensions
+package com.example.extension
 
-import com.example.RouteParams
-import com.example.Token
+import com.example.util.Length
+import com.example.util.QueryParams
+import com.example.util.RouteParams
+import com.example.util.Token
 import com.example.data.dto.util.CrudResult
 import com.example.util.AppException.InvalidException
 import com.example.util.AppException.InvalidException.Validation
@@ -27,6 +29,14 @@ internal val JWTPrincipal.requesterId: String
 val ApplicationCall.objectId: String
     get() = parameters[RouteParams.ID]
         ?: throw InvalidException(Validation.NULL_ROUTE_PARAM)
+
+val ApplicationCall.pageNumber: Int
+    get() = request.queryParameters[QueryParams.PAGE_NUMBER]
+        ?.toIntOrNull() ?: 0
+
+val ApplicationCall.pageSize: Int
+    get() = request.queryParameters[QueryParams.PAGE_SIZE]
+        ?.toIntOrNull() ?: Length.RESOURCE_PAGE_SIZE
 
 // functions
 

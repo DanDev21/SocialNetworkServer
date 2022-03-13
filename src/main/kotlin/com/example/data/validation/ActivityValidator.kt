@@ -1,7 +1,7 @@
 package com.example.data.validation
 
 import com.example.data.dto.util.CrudResult.FindResult
-import com.example.Action
+import com.example.util.Action
 import com.example.util.AppException.InvalidException
 import com.example.util.AppException.InvalidException.Validation
 import com.example.domain.entity.Activity

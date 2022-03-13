@@ -1,6 +1,6 @@
 package com.example.routes.user
 
-import com.example.Routes
+import com.example.util.Routes
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
